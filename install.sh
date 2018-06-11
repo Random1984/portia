@@ -11,7 +11,7 @@ pip install pysmb tabulate termcolor xmltodict pyasn1 pycrypto pyOpenSSL dnspyth
 ln -sf /opt /pentest
 
 cd /opt
-git clone https://github.com/CoreSecurity/impacket
+git clone https://github.com/CoreSecurity/impacket && cd impacket
 python setup.py install
 
 cd /opt
@@ -31,5 +31,6 @@ python setup.py install
 
 cd /opt
 git clone https://github.com/SpiderLabs/portia.git && cd portia
+git submodule init && git submodule update --recursive
 ./portia.py
 

